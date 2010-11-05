@@ -1,0 +1,19 @@
+RewriteEngine On
+RewriteCond %{REQUEST_URI} esr:?(\d+) [NC]
+RewriteRule ^esr:?(\d+)$ esr.php?esr=$1 [L,QSA]
+
+RewriteCond %{REQUEST_URI} region:(\d+) [NC]
+RewriteRule ^region:(\d+)$ esr_region.php?esr_region=$1 [L,QSA]
+
+RewriteCond %{REQUEST_URI} region:(\w+) [NC]
+RewriteRule ^region:(\w+)$ region.php?region=$1 [L,QSA]
+
+RewriteCond %{REQUEST_URI} region:(\w+):l [NC]
+RewriteRule ^region:(\w+):l$ region_lines.php?region=$1 [L,QSA]
+
+RewriteCond %{REQUEST_URI} region:(\w+):a [NC]
+RewriteRule ^region:(\w+):a$ region.php?region=$1 [L,QSA]
+
+RewriteCond %{REQUEST_URI} railway:(\w+) [NC]
+RewriteRule ^railway:(\w+)$ railway.php?id=$1 [L,QSA]
+
