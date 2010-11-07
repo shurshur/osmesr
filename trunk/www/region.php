@@ -282,6 +282,7 @@ $query = "
       osmdata.id=osmdata_id 
   WHERE
     osmdata_id IS NULL AND
+    user!='0' AND
     source=$region_sql
 ";
 
