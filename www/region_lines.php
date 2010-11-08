@@ -252,7 +252,8 @@ $query = "
     osmdata.name,
     osm2esr.status,
     lat,
-    lon
+    lon,
+    railway
   FROM
     osm2esr,
     osmdata
@@ -272,6 +273,7 @@ while ($r = mysql_fetch_row($res))
   $osmnode["status"] = $r[4];
   $osmnode["lat"] = $r[5];
   $osmnode["lon"] = $r[6];
+  $osmnode["railway"] = $r[7];
 
   foreach ($esr_rows[$r[0]] as $row)
     $output["rows"][$row]["osmnodes"][] = $osmnode;
@@ -303,7 +305,8 @@ $query = "
     osmdata.osm_id,
     osmdata.name,
     lat,
-    lon
+    lon,
+    railway
   FROM
     osmdata 
     LEFT JOIN osm2esr ON 
@@ -325,6 +328,7 @@ while ($r = mysql_fetch_row($res)) {
   $output_row["name"] = $r[2];
   $output_row["lat"] = $r[3];
   $output_row["lon"] = $r[4];
+  $output_row["railway"] = $r[5];
   $output["not_found"][] = $output_row;
 }
 unset($output_row);
@@ -542,7 +546,7 @@ unset($output_rows);
 	  $tmp .= "<a href='http://www.openstreetmap.org/browse/".$types[$osmnode["type"]]."/";
 	  $tmp .= $osmnode["osm_id"]."'>".$osmnode["name"]."</a></div>";
 	  #$osmnodes[] = $tmp;
-	  $osmnodes[] = "<div style='background-color: ".$color[$osmnode["status"]]."'>".osmdataurl($osmnode["type"],$osmnode["osm_id"],$osmnode["name"],$osmnode["lat"],$osmnode["lon"])."</div>";
+	  $osmnodes[] = "<div style='background-color: ".$color[$osmnode["status"]]."'>".osmdataurl($osmnode["type"],$osmnode["osm_id"],$osmnode["name"],$osmnode["lat"],$osmnode["lon"],$osmnode["railway"])."</div>";
 	}
 	if (count($osmnodes) > 0) {
 	  echo implode("\n", $osmnodes);
@@ -580,7 +584,7 @@ unset($output_rows);
     $tmp = "<img src=\"Mf_".$types[$osmnode["type"]].".png\"> <a href='http://www.openstreetmap.org/browse/".$types[$osmnode["type"]]."/";
     $tmp .= $osmnode["osm_id"]."'>".$osmnode["name"]."</a>";
     #$osmnodes[] = $tmp;
-    $osmnodes[] = osmdataurl($osmnode["type"],$osmnode["osm_id"],$osmnode["name"],$osmnode["lat"],$osmnode["lon"]);
+    $osmnodes[] = osmdataurl($osmnode["type"],$osmnode["osm_id"],$osmnode["name"],$osmnode["lat"],$osmnode["lon"],$osmnode["railway"]);
   }
   if (count($osmnodes) > 0) { 
     echo "<h3>Найдено в OSM, не найдено в ЕСР</h3><ul><li>";

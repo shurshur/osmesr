@@ -123,6 +123,7 @@ $query = "
     osmdata.lon AS lon,
     osmdata.name AS name,
     osmdata.alt_name AS alt_name,
+    osmdata.railway AS railway,
     osm2esr.status AS status
   FROM
     osm2esr,
@@ -141,7 +142,7 @@ $types = array(0=>"node",1=>"way");
 
 while($row = mysql_fetch_assoc($res))
   #print $row["lat"];
-  print "<tr><td>".osmdataurl($row["type"],$row["osm_id"],$row["name"],$row["lat"],$row["lon"])."</td></tr>";
+  print "<tr><td>".osmdataurl($row["type"],$row["osm_id"],$row["name"],$row["lat"],$row["lon"],$row["railway"])."</td></tr>";
 
 print "</table>\n";
 
