@@ -17,6 +17,7 @@ function osmdataurl($type,$id,$name,$lat,$lon,$railway="station") {
   );
 
   $link = "";
+  if($id<0) { $id = -$id; $type = 2; }
   if($type == 0 && $lat>0 && $lon>0) {
     $left = $lon-0.002;
     $right = $lon+0.002;
@@ -28,8 +29,11 @@ function osmdataurl($type,$id,$name,$lat,$lon,$railway="station") {
   } elseif ($type == 1) {
     $url = "http://127.0.0.1:8111/import?url=http://www.openstreetmap.org/api/0.6/way/$id/full";
     $link = "&nbsp;<a href=\"$url\"><img border=0 src=\"edit.png\"/></a>";
+  } elseif ($type == 2) {
+    $url = "http://127.0.0.1:8111/import?url=http://www.openstreetmap.org/api/0.6/relation/$id/full";
+    $link = "&nbsp;<a href=\"$url\"><img border=0 src=\"edit.png\"/></a>";
   }
-  return "<img src=\"".$types[$type].".png\">&nbsp;<a href=\"http://www.openstreetmap.org/browse/".$types[$type]."/$id\">".$name."</a>$link\n";
+  return "<img src=\"".$types[$type].".png\"><img src=\"$railway.png\">&nbsp;<a href=\"http://www.openstreetmap.org/browse/".$types[$type]."/$id\">".$name."</a>$link\n";
 }
 
 ?>
