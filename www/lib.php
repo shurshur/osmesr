@@ -9,7 +9,7 @@ function dbconn() {
   @mysql_query("SET NAMES $mysql_charset");
 }
 
-function osmdataurl($type,$id,$name,$lat,$lon) {
+function osmdataurl($type,$id,$name,$lat,$lon,$railway="station") {
   $types = array(
     0 => "node",
     1 => "way",
