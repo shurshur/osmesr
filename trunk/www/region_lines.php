@@ -17,7 +17,13 @@ $output["region_code"] = $region;
 
 $query = "
   SELECT
-    id
+    id,
+    q_stations,
+    q_found,
+    q_uniq,
+    q_nonuniq,
+    q_esrnf,
+    updated
   FROM
     regions
   WHERE
@@ -35,6 +41,12 @@ $regions_ids = array();
 while ($r = mysql_fetch_row($res))
 {
   $region_ids[] = $r[0];
+  $q_stations = $r[1];
+  $q_found = $r[2];
+  $q_uniq = $r[3];
+  $q_nonuniq = $r[4];
+  $q_esrnf = $r[5];
+  $updated = $r[6];
 }
 $ids_list = implode(",", $region_ids);
 mysql_free_result($res);
@@ -353,6 +365,11 @@ unset($output_rows);
 <h3><?
   echo $output["region_name"];
 ?></h3>
+<?
+  echo "<p>ЕСР (найдено/всего): ".$q_found."/".$q_stations." (".round($q_found*100./$q_stations)."%)</p>";
+  echo "<p>OSM (однозначно/неоднозначно/не найдено): ".$q_uniq."/".$q_nonuniq."/".$q_esrnf."</p>";
+  echo "<p>Обновлено: ".date("H:i:s d.m.Y",$updated)."</p>";
+?>
 <a href='./region:<? echo $output["region_code"]; ?>:a'>По алфавиту</a> | <b>По участкам</b><p>
 <table border="1" cellspacing="0" cellpadding="0">
   <tr>
