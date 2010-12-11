@@ -123,7 +123,8 @@ $query = "
     stations.railway_id,
     stations.closed,
     express.tutu_lat,
-    express.tutu_lon
+    express.tutu_lon,
+    station_type_id
   FROM
     stations
     LEFT JOIN regions ON stations.region_id = regions.id
@@ -186,6 +187,8 @@ while ($r = mysql_fetch_row($res))
   $output_row["tutu"] = array();
   $output_row["tutu"]["lat"] = $r[21];
   $output_row["tutu"]["lon"] = $r[22];
+
+  $output_row["station_type_id"] = $r[23];
 
   $output["rows"][$esr] = $output_row;
   $esrs[] = $esr;
@@ -332,7 +335,7 @@ mysql_free_result($res);
   echo "<p>OSM (однозначно/неоднозначно/не найдено): ".$q_uniq."/".$q_nonuniq."/".$q_esrnf."</p>";
   echo "<p>Обновлено: ".date("H:i:s d.m.Y",$updated)."</p>";
 ?>
-<b>По алфавиту</b> | <a href='./region:<? echo $output["region_code"]; ?>:l'>По участкам</a><p>
+<b>По алфавиту</b> | <a href='./region:<? echo $output["region_code"]; ?>:l'>По участкам</a> | <a href="legend">Легенда</a><p>
 <table border="1" cellspacing="0" cellpadding="0">
   <tr>
     <th>
@@ -342,7 +345,10 @@ mysql_free_result($res);
       Станция
     </th>
     <th>
-      Статус
+      OSM
+    </th>
+    <th>
+      Соседние станции
     </th>
     <th>
       Источник
@@ -353,16 +359,10 @@ mysql_free_result($res);
     </th>
 <? } ?>
     <th>
-      Соседние станции
-    </th>
-    <th>
       Подчинение
     </th>
     <th>
       Искать
-    </th>
-    <th>
-      OSM
     </th>
     <th>
       &nbsp;
@@ -381,7 +381,7 @@ mysql_free_result($res);
     </td>
     <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
       <?
-        $tmp = $output_row["name"];
+        $tmp = "<img src=\"st".$output_row["station_type_id"].".png\" />&nbsp;".$output_row["name"];
         if ($output_row["dup_esr"] != "")
 	  $tmp = "<strike>$tmp</strike>";
         echo $tmp;
@@ -389,12 +389,43 @@ mysql_free_result($res);
     </td>
     <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
       <?
-        $tmp = $output_row["station_type"];
-        if ($output_row["dup_esr"] != "")
-	  $tmp = "<strike>$tmp</strike>";
-	if ($tmp == "") 
-	  $tmp = "&nbsp;";
-        echo $tmp;
+        $osmnodes = array();
+	foreach ($output_row["osmnodes"] as $osmnode) 
+	{
+	  $osmnodes[] = "<div style='background-color: ".$color[$osmnode["status"]]."'>".osmdataurl($osmnode["type"],$osmnode["osm_id"],$osmnode["name"],$osmnode["lat"],$osmnode["lon"],$osmnode["railway"])."</div>";
+	}
+	if (count($osmnodes) > 0) {
+	  echo implode("\n", $osmnodes);
+	} else {
+          if ($output_row["dup_esr"] != "")
+	    echo "<strike><a href=./esr:".$output_row["dup_esr"].">ЕСР: ".$output_row["dup_esr"]."</a></strike>";
+	  else
+	    echo "&nbsp;";
+	  }
+      ?>
+    </td>
+    <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
+      <?
+        $neighbours = array();
+        foreach ($output_row["neighbour"] as $neighbour) {
+	  $tmp = $neighbour["name"]; 
+          if ($neighbour["region_code"] != "") {
+	    $tmp = "<a href=\"./region:".$neighbour["region_code"]."#".$neighbour["esr"]."\">".$tmp."</a>";
+	    $tmp .= " (<a href=\"./region:";
+	    $tmp .= $neighbour["region_code"]."\">".$neighbour["region_name"]."</a>)";
+	  } elseif ($neighbour["region_id"] === "0") {
+	    $tmp = "<a href=\"./region:".$neighbour["region_id"]."#".$neighbour["esr"]."\">".$tmp."</a>";
+	    $tmp .= " (<a href=\"./region:";
+	    $tmp .= $neighbour["region_id"]."\">???</a>)";
+	  } else {
+	    $tmp = "<a href=\"#".$neighbour["esr"]."\">".$tmp."</a>";
+	  }
+	  $neighbours[] = $tmp;
+	}
+	if (count($neighbours)>0) 
+	  echo implode (", ", $neighbours);
+	else
+	  echo "&nbsp;";
       ?>
     </td>
     <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
@@ -430,30 +461,6 @@ mysql_free_result($res);
       ?>
     </td>
 <? } ?>
-    <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
-      <?
-        $neighbours = array();
-        foreach ($output_row["neighbour"] as $neighbour) {
-	  $tmp = $neighbour["name"]; 
-          if ($neighbour["region_code"] != "") {
-	    $tmp = "<a href=\"./region:".$neighbour["region_code"]."#".$neighbour["esr"]."\">".$tmp."</a>";
-	    $tmp .= " (<a href=\"./region:";
-	    $tmp .= $neighbour["region_code"]."\">".$neighbour["region_name"]."</a>)";
-	  } elseif ($neighbour["region_id"] === "0") {
-	    $tmp = "<a href=\"./region:".$neighbour["region_id"]."#".$neighbour["esr"]."\">".$tmp."</a>";
-	    $tmp .= " (<a href=\"./region:";
-	    $tmp .= $neighbour["region_id"]."\">???</a>)";
-	  } else {
-	    $tmp = "<a href=\"#".$neighbour["esr"]."\">".$tmp."</a>";
-	  }
-	  $neighbours[] = $tmp;
-	}
-	if (count($neighbours)>0) 
-	  echo implode (", ", $neighbours);
-	else
-	  echo "&nbsp;";
-      ?>
-    </td>
     <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
       <? 
         $tmp = "";
@@ -504,32 +511,6 @@ mysql_free_result($res);
     </td>
     <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
       <?
-        $osmnodes = array();
-	foreach ($output_row["osmnodes"] as $osmnode) 
-	{
-	  $types = array(
-	    0 => "node",
-	    1 => "way",
-	    2 => "relation"
-	  );
-	  $tmp  = "<div style='background-color: ".$color[$osmnode["status"]]."'>";
-	  $tmp .= "<img src='Mf_".$types[$osmnode["type"]].".png'>";
-	  $tmp .= "<a href='http://www.openstreetmap.org/browse/".$types[$osmnode["type"]]."/";
-	  $tmp .= $osmnode["osm_id"]."'>".$osmnode["name"]."</a></div>";
-	  $osmnodes[] = "<div style='background-color: ".$color[$osmnode["status"]]."'>".osmdataurl($osmnode["type"],$osmnode["osm_id"],$osmnode["name"],$osmnode["lat"],$osmnode["lon"],$osmnode["railway"])."</div>";
-	}
-	if (count($osmnodes) > 0) {
-	  echo implode("\n", $osmnodes);
-	} else {
-          if ($output_row["dup_esr"] != "")
-	    echo "<strike><a href=./esr:".$output_row["dup_esr"].">ЕСР: ".$output_row["dup_esr"]."</a></strike>";
-	  else
-	    echo "&nbsp;";
-	  }
-      ?>
-    </td>
-    <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
-      <?
         if ($output_row["closed"] != "") {
           echo "Закрыта (<a href='".urlencode("http://www.openstreetmap.org/user/".$output_row["closed"]);
           echo "'>".$output_row["closed"]."</a>)";
@@ -545,25 +526,6 @@ mysql_free_result($res);
 <? 
   $osmnodes = array();
   foreach ($output["not_found"] as $osmnode) {
-    $types = array(
-      0 => "node",
-      1 => "way",
-      2 => "relation"
-    );
-    $link = "";
-    $lat = $osmnode["lat"];
-    $lon = $osmnode["lon"];
-    if ($osmnode["type"] == 0 && $lat>0 && $lon>0) {
-      $left = $lon-0.002;
-      $right = $lon+0.002;
-      $bottom = $lat-0.0012;
-      $top = $lat+0.0012;
-      $link = " <a href=\"http://127.0.0.1:8111/load_and_zoom?left=$left&right=$right&top=$top&bottom=$bottom&select=node$osm_id\"><img border=1 src=\"josm.png\"/></a>";
-    } elseif ($osmnode["type"] == 1) {
-      $link = " <a href=\"http://www.openstreetmap.org/api/0.6/way/$id/full\"><img border=1 src=\"josm.png\"/></a>";
-    }
-    $tmp = "<img src=\"Mf_".$types[$osmnode["type"]].".png\"> <a href='http://www.openstreetmap.org/browse/".$types[$osmnode["type"]]."/";
-    $tmp .= $osmnode["osm_id"]."'>".$osmnode["name"]."</a>$link";
     $osmnodes[] = osmdataurl($osmnode["type"],$osmnode["osm_id"],$osmnode["name"],$osmnode["lat"],$osmnode["lon"],$osmnode["railway"]);
   }
   if (count($osmnodes) > 0) { 

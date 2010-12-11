@@ -171,16 +171,17 @@ echo "<tr><td><b>Всего</b></td><td align=right>$p%</td><td align=right>$q_found/
 <li>Неодн. - Найдено неоднозначно в OSM - число объектов в OSM, которым найдено несколько станций в ЕСР (скорее всего, с одинаковым названием; подсвечиваются в списке жёлтым)
 <li>Нет - Не найдено в ЕСР - число объектов в OSM, которым вообще не найдено никаких соответствий в ЕСР (возможно, название станции неверно; отображаются отдельным списком под таблицей)
 <li>Обновлено - время последнего удачного запуска робота для этого региона. Автоматическое обновление запускается в 16:00 ежедневно и продолжается, в зависимости от
-загрузки сервера и канала в интернет, до часа.
+загрузки сервера и канала в интернет, около полутора часов.
 <li>Источник данных:
 <ul>
-<!--<li>Азербайджан: OSM XML - <a href="http://downloads.cloudmade.com/europe/azerbaijan">Cloudmade</a>, полигон обрезки - <a href="http://gis-lab.info/qa/osm-poly.html">Gis-Lab</a>
-<li>Армения: OSM XML - <a href="http://downloads.cloudmade.com/europe/armenia">Cloudmade</a>, полигон обрезки - собственный, на базе границы в OSM-->
 <li>Беларусь, Украина: OSM XML - <a href="/osm">собственные</a>, полигоны обрезки - собственные, на базе границ в OSM, исходный файл - <a href="http://gis-lab.info/projects/osm-export.html">Gis-Lab</a>
 <li>Эстония, Латвия, Литва, Молдова: OSM XML - <a href="http://download.geofabrik.de/osm/europe/">Geofabrik</a>.
 <li>Все остальные регионы: Gis-Lab PostGIS
 </ul>
 </ul>
 Статус планового обновления: <b><? print file_get_contents("status"); ?></b>
-<p>Идея принадлежит <a href="http://www.openstreetmap.org/user/Sergey%20Gladilin">Sergey Gladilin</a>. Разработка и реализация - <a href="http://www.openstreetmap.org/user/Sergey%20Gladilin">Sergey Gladilin</a> и <a href="http://www.openstreetmap.org/user/Alexandr%20Zeinalov">Alexandr Zeinalov</a>.
-<br>
+<p>&copy; Идея принадлежит <a href="http://www.openstreetmap.org/user/Sergey%20Gladilin">Sergey Gladilin</a>. Разработка и реализация - <a href="http://www.openstreetmap.org/user/Sergey%20Gladilin">Sergey Gladilin</a> и <a href="http://www.openstreetmap.org/user/Alexandr%20Zeinalov">Alexandr Zeinalov</a>.
+<br>&copy; <a href="http://code.google.com/p/osmesr/">Исходный код</a> доступен по лицензии <a href="http://www.gnu.org/licenses/gpl.html">GPL 3.0</a>.
+<br>&copy; Использованные изображения частично основаны на картинках с сайтов <a href="http://wikipdia.org/">wikipedia.org</a> и
+<a href="http://wiki.openstreetmap.org/">wiki.openstreetmap.org</a> и доступны по лицензии
+<a href="http://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA 3.0</a>.</p>
