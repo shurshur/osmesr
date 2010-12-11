@@ -233,8 +233,8 @@ elif input == "@":
         row['st'] = 2
         osmdata[k] = row
 else:
-  print "filename input unsupported yet!"
-  sys.exit(1)
+  f = open(input)
+  a = osmParser(f, source)
   
 print "OSMDATA: %d records after parse" % len(osmdata)
 
