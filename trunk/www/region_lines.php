@@ -125,7 +125,8 @@ $query = "
     lines_end2.name,
     stations.closed,
     express.tutu_lat,
-    express.tutu_lon
+    express.tutu_lon,
+    stations.station_type_id
   FROM
     `lines`
     LEFT JOIN stations_of_lines ON `lines`.id = stations_of_lines.line_id
@@ -205,6 +206,8 @@ while ($r = mysql_fetch_row($res))
   $output_row["tutu"] = array();
   $output_row["tutu"]["lat"] = $r[24];
   $output_row["tutu"]["lon"] = $r[25];
+
+  $output_row["station_type_id"] = $r[26];
 
   $output["rows"][$ord] = $output_row;
 
@@ -370,7 +373,7 @@ unset($output_rows);
   echo "<p>OSM (однозначно/неоднозначно/не найдено): ".$q_uniq."/".$q_nonuniq."/".$q_esrnf."</p>";
   echo "<p>Обновлено: ".date("H:i:s d.m.Y",$updated)."</p>";
 ?>
-<a href='./region:<? echo $output["region_code"]; ?>:a'>По алфавиту</a> | <b>По участкам</b><p>
+<a href='./region:<? echo $output["region_code"]; ?>:a'>По алфавиту</a> | <b>По участкам</b> | <a href="legend">Легенда</a><p>
 <table border="1" cellspacing="0" cellpadding="0">
   <tr>
     <th>
@@ -380,7 +383,10 @@ unset($output_rows);
       Станция
     </th>
     <th>
-      Статус
+      OSM
+    </th>
+    <th>
+      Соседние станции
     </th>
     <th>
       Источник
@@ -391,16 +397,10 @@ unset($output_rows);
     </th>
 <? } ?>
     <th>
-      Соседние станции
-    </th>
-    <th>
       Подчинение
     </th>
     <th>
       Искать
-    </th>
-    <th>
-      OSM
     </th>
     <th>
       &nbsp;
@@ -408,9 +408,9 @@ unset($output_rows);
   </tr>
 <? $color = array(0 => "white", 1 => "lightgreen", 2 => "yellow", 3 => "#CCCCCC"); ?>
 <? 
-  $colspan = 9;
+  $colspan = 8;
   if (!$output["single_region"])
-    $colspan = 10;
+    $colspan = 9;
   foreach ($output["rows"] as $line_name => $output_line) { 
     if ($line_name != "")
       echo "<tr><td colspan='$colspan' bgcolor='#999999'><b>$line_name</b></td></tr>\n";
@@ -427,7 +427,7 @@ unset($output_rows);
     </td>
     <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
       <?
-        $tmp = $output_row["name"];
+        $tmp = "<img src=\"st".$output_row["station_type_id"].".png\" />&nbsp;".$output_row["name"];
         if ($output_row["dup_esr"] != "")
 	  $tmp = "<strike>$tmp</strike>";
         echo $tmp;
@@ -435,12 +435,43 @@ unset($output_rows);
     </td>
     <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
       <?
-        $tmp = $output_row["station_type"];
-        if ($output_row["dup_esr"] != "")
-	  $tmp = "<strike>$tmp</strike>";
-	if ($tmp == "") 
-	  $tmp = "&nbsp;";
-        echo $tmp;
+        $osmnodes = array();
+	foreach ($output_row["osmnodes"] as $osmnode) 
+	{
+	  $osmnodes[] = "<div style='background-color: ".$color[$osmnode["status"]]."'>".osmdataurl($osmnode["type"],$osmnode["osm_id"],$osmnode["name"],$osmnode["lat"],$osmnode["lon"],$osmnode["railway"])."</div>";
+	}
+	if (count($osmnodes) > 0) {
+	  echo implode("\n", $osmnodes);
+	} else {
+          if ($output_row["dup_esr"] != "")
+	    echo "<strike><a href=./esr:".$output_row["dup_esr"].">ЕСР: ".$output_row["dup_esr"]."</a></strike>";
+	  else
+	    echo "&nbsp;";
+	  }
+      ?>
+    </td>
+    <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
+      <?
+        $neighbours = array();
+        foreach ($output_row["neighbour"] as $neighbour) {
+	  $tmp = $neighbour["name"]; 
+          if ($neighbour["region_code"] != "") {
+	    $tmp = "<a href=\"./region:".$neighbour["region_code"].":l#".$neighbour["esr"]."\">".$tmp."</a>";
+	    $tmp .= " (<a href=\"./region:";
+	    $tmp .= $neighbour["region_code"].":l\">".$neighbour["region_name"]."</a>)";
+	  } elseif ($neighbour["region_id"] === "0") {
+	    $tmp = "<a href=\"./region:".$neighbour["region_id"]."#".$neighbour["esr"]."\">".$tmp."</a>";
+	    $tmp .= " (<a href=\"./region:";
+	    $tmp .= $neighbour["region_id"]."\">???</a>)";
+	  } else {
+	    $tmp = "<a href=\"#".$neighbour["esr"]."\">".$tmp."</a>";
+	  }
+	  $neighbours[] = $tmp;
+	}
+	if (count($neighbours)>0) 
+	  echo implode (", ", $neighbours);
+	else
+	  echo "&nbsp;";
       ?>
     </td>
     <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
@@ -476,30 +507,6 @@ unset($output_rows);
       ?>
     </td>
 <? } ?>
-    <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
-      <?
-        $neighbours = array();
-        foreach ($output_row["neighbour"] as $neighbour) {
-	  $tmp = $neighbour["name"]; 
-          if ($neighbour["region_code"] != "") {
-	    $tmp = "<a href=\"./region:".$neighbour["region_code"].":l#".$neighbour["esr"]."\">".$tmp."</a>";
-	    $tmp .= " (<a href=\"./region:";
-	    $tmp .= $neighbour["region_code"].":l\">".$neighbour["region_name"]."</a>)";
-	  } elseif ($neighbour["region_id"] === "0") {
-	    $tmp = "<a href=\"./region:".$neighbour["region_id"]."#".$neighbour["esr"]."\">".$tmp."</a>";
-	    $tmp .= " (<a href=\"./region:";
-	    $tmp .= $neighbour["region_id"]."\">???</a>)";
-	  } else {
-	    $tmp = "<a href=\"#".$neighbour["esr"]."\">".$tmp."</a>";
-	  }
-	  $neighbours[] = $tmp;
-	}
-	if (count($neighbours)>0) 
-	  echo implode (", ", $neighbours);
-	else
-	  echo "&nbsp;";
-      ?>
-    </td>
     <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
       <? 
         $tmp = "";
@@ -550,33 +557,6 @@ unset($output_rows);
     </td>
     <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
       <?
-        $osmnodes = array();
-	foreach ($output_row["osmnodes"] as $osmnode) 
-	{
-	  $types = array(
-	    0 => "node",
-	    1 => "way",
-	    2 => "relation"
-	  );
-	  $tmp  = "<div style='background-color: ".$color[$osmnode["status"]]."'>";
-	  $tmp .= "<img src='Mf_".$types[$osmnode["type"]].".png'>";
-	  $tmp .= "<a href='http://www.openstreetmap.org/browse/".$types[$osmnode["type"]]."/";
-	  $tmp .= $osmnode["osm_id"]."'>".$osmnode["name"]."</a></div>";
-	  #$osmnodes[] = $tmp;
-	  $osmnodes[] = "<div style='background-color: ".$color[$osmnode["status"]]."'>".osmdataurl($osmnode["type"],$osmnode["osm_id"],$osmnode["name"],$osmnode["lat"],$osmnode["lon"],$osmnode["railway"])."</div>";
-	}
-	if (count($osmnodes) > 0) {
-	  echo implode("\n", $osmnodes);
-	} else {
-          if ($output_row["dup_esr"] != "")
-	    echo "<strike><a href=./esr:".$output_row["dup_esr"].">ЕСР: ".$output_row["dup_esr"]."</a></strike>";
-	  else
-	    echo "&nbsp;";
-	  }
-      ?>
-    </td>
-    <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
-      <?
         if ($output_row["closed"] != "") {
 	  echo "Закрыта (<a href='".urlencode("http://www.openstreetmap.org/user/".$output_row["closed"]);
 	  echo "'>".$output_row["closed"]."</a>)";
@@ -593,14 +573,6 @@ unset($output_rows);
 <? 
   $osmnodes = array();
   foreach ($output["not_found"] as $osmnode) {
-    $types = array(
-      0 => "node",
-      1 => "way",
-      2 => "relation"
-    );
-    $tmp = "<img src=\"Mf_".$types[$osmnode["type"]].".png\"> <a href='http://www.openstreetmap.org/browse/".$types[$osmnode["type"]]."/";
-    $tmp .= $osmnode["osm_id"]."'>".$osmnode["name"]."</a>";
-    #$osmnodes[] = $tmp;
     $osmnodes[] = osmdataurl($osmnode["type"],$osmnode["osm_id"],$osmnode["name"],$osmnode["lat"],$osmnode["lon"],$osmnode["railway"]);
   }
   if (count($osmnodes) > 0) { 
