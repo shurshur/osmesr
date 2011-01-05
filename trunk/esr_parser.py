@@ -348,7 +348,7 @@ for k in osmdata.keys():
       except:
         db.query("INSERT INTO osm2esr (osmdata_id,esr) VALUES ('%s','%s')" % (osmdata_id, user))
         pass
-      osm2esrs[osmdata_id]=[esr]
+      osm2esrs[osmdata_id]=[user]
     else:
       # don't touch esr2osm[user]['st'] here!
       print "WARNING esr:user=%s NOT FOUND IN ESR" % user
