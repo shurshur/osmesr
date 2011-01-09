@@ -18,6 +18,7 @@ function osmdataurl($type,$id,$name,$lat,$lon,$railway="station") {
 
   $link = "";
   if($id<0) { $id = -$id; $type = 2; }
+  if($name == "" || !isset($name)) $name = "(без названия)";
   if($type == 0 && $lat>0 && $lon>0) {
     $left = $lon-0.002;
     $right = $lon+0.002;
