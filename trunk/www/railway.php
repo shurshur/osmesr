@@ -4,7 +4,7 @@
   Header("Content-Type: text/html; charset=$site_charset\n");
 ?>
 <style>a { text-decoration: none; }</style>
-<h1><a href='./'>Единая сетевая разметка</a></h1>
+<h1><a href='./'>п∙п╢п╦п╫п╟я▐ я│п╣я┌п╣п╡п╟я▐ я─п╟п╥п╪п╣я┌п╨п╟</a></h1>
 <?php
 
 dbconn();
@@ -31,13 +31,13 @@ if (!($res = mysql_query($query)))
 if(mysql_num_rows($res)<=0)
   die;
 $r = mysql_fetch_row($res);
-echo "<h2>".$r[0]." ж.д.</h2>\n";
+echo "<h2>".$r[0]." п╤.п╢.</h2>\n";
 
 echo "<table border='0'>";
 if ($r[1] != '')
-  echo "<tr><td>Официльный сайт</td><td>&nbsp;</td><td><a href='".$r[1]."'>".$r[1]."</td></tr>";
+  echo "<tr><td>п·я└п╦я├п╦п╩я▄п╫я▀п╧ я│п╟п╧я┌</td><td>&nbsp;</td><td><a href='".$r[1]."'>".$r[1]."</td></tr>";
 if ($r[2] != '')
-  echo "<tr><td>Схема дороги</td><td>&nbsp;</td><td><a href='".$r[2]."'>скачать</a></td></tr>";
+  echo "<tr><td>п║я┘п╣п╪п╟ п╢п╬я─п╬пЁп╦</td><td>&nbsp;</td><td><a href='".$r[2]."'>я│п╨п╟я┤п╟я┌я▄</a></td></tr>";
 echo "</table>";
 
 $query = "
@@ -69,7 +69,7 @@ foreach ($divisions as $cat => $divs) {
     echo "<li>".$div["name"];
     if ($div["map_url"] != '') {
       echo " (";
-      echo "<a href='".$div["map_url"]."'>схема</a>";
+      echo "<a href='".$div["map_url"]."'>я│я┘п╣п╪п╟</a>";
       echo ")";
     }
     echo "</li>\n";

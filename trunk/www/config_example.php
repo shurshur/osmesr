@@ -4,8 +4,8 @@ $mysql_host = "localhost";
 $mysql_db = "osmesr";
 $mysql_login = "changeme";
 $mysql_password = "changeme";
-$mysql_charset = "koi8r";
-$site_charset = "koi8-r";
-$site_locale = "ru_RU.KOI8-R";
+$mysql_charset = "utf8";
+$site_charset = "utf-8";
+$site_locale = "ru_RU.UTF-8";
 
 ?>

@@ -4,8 +4,8 @@
   Header("Content-Type: text/html; charset=$site_charset\n");
 ?>
 <style>a { text-decoration: none; }</style>
-<h1>Единая сетевая разметка</h1>
-<p><a href="http://forum.openstreetmap.org/viewtopic.php?id=9084">Подробнее</a></p>
+<h1>п∙п╢п╦п╫п╟я▐ я│п╣я┌п╣п╡п╟я▐ я─п╟п╥п╪п╣я┌п╨п╟</h1>
+<p><a href="http://forum.openstreetmap.org/viewtopic.php?id=9084">п÷п╬п╢я─п╬п╠п╫п╣п╣</a></p>
 <?php
 
 dbconn();
@@ -94,7 +94,7 @@ if (!($res = mysql_query($query)))
 while ($r = mysql_fetch_row($res))
 {
   $tmp = explode(" - ", $r[0]);
-  $regions[] = array("name" => $tmp[0], "esr_names" => $tmp[0], "source" => $r[1], "country" => "Неразобранное", "id" => $r[2],
+  $regions[] = array("name" => $tmp[0], "esr_names" => $tmp[0], "source" => $r[1], "country" => "п²п╣я─п╟п╥п╬п╠я─п╟п╫п╫п╬п╣", "id" => $r[2],
                      "q_stations" => $r[4], "q_uniq" => $r[4], "q_nonuniq" => $r[5], "q_esrnf" => $r[6], "updated" => $r[7], "q_found" => $r[8]);
   $q_stations += $r[3];
   $q_found += $r[8];
@@ -119,9 +119,9 @@ if (!($res = mysql_query($query)))
 $r = mysql_fetch_row($res);
 
 if ($r[0] > 0) 
-  $regions[] = array("name" => "*** (регион не установлен) ***", "esr_names" => "*** (регион не установлен) ***", "source" => '', "country" => "Неразобранное", "id" => 0, "q_stations" => $r[0], "q_uniq" => 0, "q_nonuniq" => 0, "updated" => "", "q_found" => "");
+  $regions[] = array("name" => "*** (я─п╣пЁп╦п╬п╫ п╫п╣ я┐я│я┌п╟п╫п╬п╡п╩п╣п╫) ***", "esr_names" => "*** (я─п╣пЁп╦п╬п╫ п╫п╣ я┐я│я┌п╟п╫п╬п╡п╩п╣п╫) ***", "source" => '', "country" => "п²п╣я─п╟п╥п╬п╠я─п╟п╫п╫п╬п╣", "id" => 0, "q_stations" => $r[0], "q_uniq" => 0, "q_nonuniq" => 0, "updated" => "", "q_found" => "");
 
-echo "<table border=1 cellspacing=0>\n<tr><td align=center><b>Регион</b></td><td align=center><b>%%</b></td><td align=center><b>ЕСР</b></td><td align=center><b>Одн.</b></td><td align=center><b>Неодн.</b></td><td align=center><b>Нет<b></td><td align=center><b>Обновлено</b></tr>\n";
+echo "<table border=1 cellspacing=0>\n<tr><td align=center><b>п═п╣пЁп╦п╬п╫</b></td><td align=center><b>%%</b></td><td align=center><b>п∙п║п═</b></td><td align=center><b>п·п╢п╫.</b></td><td align=center><b>п²п╣п╬п╢п╫.</b></td><td align=center><b>п²п╣я┌<b></td><td align=center><b>п·п╠п╫п╬п╡п╩п╣п╫п╬</b></tr>\n";
 
 $country = '';
 foreach ($regions as $region)
@@ -161,27 +161,27 @@ foreach ($regions as $region)
 $p = 0;
 if ($q_stations)
   $p = round($q_found*100/$q_stations);
-echo "<tr><td><b>Всего</b></td><td align=right>$p%</td><td align=right>$q_found/<br>$q_stations</td><td align=right>$q_uniq</td><td align=right>$q_nonuniq</td><td align=right>$q_esrnf</td><td>&nbsp;</td></tr></table>\n";
+echo "<tr><td><b>п▓я│п╣пЁп╬</b></td><td align=right>$p%</td><td align=right>$q_found/<br>$q_stations</td><td align=right>$q_uniq</td><td align=right>$q_nonuniq</td><td align=right>$q_esrnf</td><td>&nbsp;</td></tr></table>\n";
 
 ?>
 <ul>
-<li>%% - отношение числа станций, найденных ОДНОЗНАЧНО в OSM, к числу станций в ЕСР
-<li>ЕСР - Число однозначно найденных в OSM и общее число станций в ЕСР - не включает идентифицированные дубликаты (отображаются в списке станций зачёркнутыми)
-<li>Одн. - Найдено однозначно в OSM - число объектов в OSM, которым найдена однозначная станция в ЕСР (подсвечиваются в списке зелёным).
-<li>Неодн. - Найдено неоднозначно в OSM - число объектов в OSM, которым найдено несколько станций в ЕСР (скорее всего, с одинаковым названием; подсвечиваются в списке жёлтым)
-<li>Нет - Не найдено в ЕСР - число объектов в OSM, которым вообще не найдено никаких соответствий в ЕСР (возможно, название станции неверно; отображаются отдельным списком под таблицей)
-<li>Обновлено - время последнего удачного запуска робота для этого региона. Автоматическое обновление запускается в 16:00 ежедневно и продолжается, в зависимости от
-загрузки сервера и канала в интернет, около полутора часов.
-<li>Источник данных:
+<li>%% - п╬я┌п╫п╬я┬п╣п╫п╦п╣ я┤п╦я│п╩п╟ я│я┌п╟п╫я├п╦п╧, п╫п╟п╧п╢п╣п╫п╫я▀я┘ п·п■п²п·п≈п²п░п╖п²п· п╡ OSM, п╨ я┤п╦я│п╩я┐ я│я┌п╟п╫я├п╦п╧ п╡ п∙п║п═
+<li>п∙п║п═ - п╖п╦я│п╩п╬ п╬п╢п╫п╬п╥п╫п╟я┤п╫п╬ п╫п╟п╧п╢п╣п╫п╫я▀я┘ п╡ OSM п╦ п╬п╠я┴п╣п╣ я┤п╦я│п╩п╬ я│я┌п╟п╫я├п╦п╧ п╡ п∙п║п═ - п╫п╣ п╡п╨п╩я▌я┤п╟п╣я┌ п╦п╢п╣п╫я┌п╦я└п╦я├п╦я─п╬п╡п╟п╫п╫я▀п╣ п╢я┐п╠п╩п╦п╨п╟я┌я▀ (п╬я┌п╬п╠я─п╟п╤п╟я▌я┌я│я▐ п╡ я│п©п╦я│п╨п╣ я│я┌п╟п╫я├п╦п╧ п╥п╟я┤я▒я─п╨п╫я┐я┌я▀п╪п╦)
+<li>п·п╢п╫. - п²п╟п╧п╢п╣п╫п╬ п╬п╢п╫п╬п╥п╫п╟я┤п╫п╬ п╡ OSM - я┤п╦я│п╩п╬ п╬п╠я┼п╣п╨я┌п╬п╡ п╡ OSM, п╨п╬я┌п╬я─я▀п╪ п╫п╟п╧п╢п╣п╫п╟ п╬п╢п╫п╬п╥п╫п╟я┤п╫п╟я▐ я│я┌п╟п╫я├п╦я▐ п╡ п∙п║п═ (п©п╬п╢я│п╡п╣я┤п╦п╡п╟я▌я┌я│я▐ п╡ я│п©п╦я│п╨п╣ п╥п╣п╩я▒п╫я▀п╪).
+<li>п²п╣п╬п╢п╫. - п²п╟п╧п╢п╣п╫п╬ п╫п╣п╬п╢п╫п╬п╥п╫п╟я┤п╫п╬ п╡ OSM - я┤п╦я│п╩п╬ п╬п╠я┼п╣п╨я┌п╬п╡ п╡ OSM, п╨п╬я┌п╬я─я▀п╪ п╫п╟п╧п╢п╣п╫п╬ п╫п╣я│п╨п╬п╩я▄п╨п╬ я│я┌п╟п╫я├п╦п╧ п╡ п∙п║п═ (я│п╨п╬я─п╣п╣ п╡я│п╣пЁп╬, я│ п╬п╢п╦п╫п╟п╨п╬п╡я▀п╪ п╫п╟п╥п╡п╟п╫п╦п╣п╪; п©п╬п╢я│п╡п╣я┤п╦п╡п╟я▌я┌я│я▐ п╡ я│п©п╦я│п╨п╣ п╤я▒п╩я┌я▀п╪)
+<li>п²п╣я┌ - п²п╣ п╫п╟п╧п╢п╣п╫п╬ п╡ п∙п║п═ - я┤п╦я│п╩п╬ п╬п╠я┼п╣п╨я┌п╬п╡ п╡ OSM, п╨п╬я┌п╬я─я▀п╪ п╡п╬п╬п╠я┴п╣ п╫п╣ п╫п╟п╧п╢п╣п╫п╬ п╫п╦п╨п╟п╨п╦я┘ я│п╬п╬я┌п╡п╣я┌я│я┌п╡п╦п╧ п╡ п∙п║п═ (п╡п╬п╥п╪п╬п╤п╫п╬, п╫п╟п╥п╡п╟п╫п╦п╣ я│я┌п╟п╫я├п╦п╦ п╫п╣п╡п╣я─п╫п╬; п╬я┌п╬п╠я─п╟п╤п╟я▌я┌я│я▐ п╬я┌п╢п╣п╩я▄п╫я▀п╪ я│п©п╦я│п╨п╬п╪ п©п╬п╢ я┌п╟п╠п╩п╦я├п╣п╧)
+<li>п·п╠п╫п╬п╡п╩п╣п╫п╬ - п╡я─п╣п╪я▐ п©п╬я│п╩п╣п╢п╫п╣пЁп╬ я┐п╢п╟я┤п╫п╬пЁп╬ п╥п╟п©я┐я│п╨п╟ я─п╬п╠п╬я┌п╟ п╢п╩я▐ я█я┌п╬пЁп╬ я─п╣пЁп╦п╬п╫п╟. п░п╡я┌п╬п╪п╟я┌п╦я┤п╣я│п╨п╬п╣ п╬п╠п╫п╬п╡п╩п╣п╫п╦п╣ п╥п╟п©я┐я│п╨п╟п╣я┌я│я▐ п╡ 16:00 п╣п╤п╣п╢п╫п╣п╡п╫п╬ п╦ п©я─п╬п╢п╬п╩п╤п╟п╣я┌я│я▐, п╡ п╥п╟п╡п╦я│п╦п╪п╬я│я┌п╦ п╬я┌
+п╥п╟пЁя─я┐п╥п╨п╦ я│п╣я─п╡п╣я─п╟ п╦ п╨п╟п╫п╟п╩п╟ п╡ п╦п╫я┌п╣я─п╫п╣я┌, п╬п╨п╬п╩п╬ п©п╬п╩я┐я┌п╬я─п╟ я┤п╟я│п╬п╡.
+<li>п≤я│я┌п╬я┤п╫п╦п╨ п╢п╟п╫п╫я▀я┘:
 <ul>
-<li>Беларусь, Украина: OSM XML - <a href="/osm">собственные</a>, полигоны обрезки - собственные, на базе границ в OSM, исходный файл - <a href="http://gis-lab.info/projects/osm-export.html">Gis-Lab</a>
-<li>Эстония, Латвия, Литва, Молдова: OSM XML - <a href="http://download.geofabrik.de/osm/europe/">Geofabrik</a>.
-<li>Все остальные регионы: Gis-Lab PostGIS
+<li>п▒п╣п╩п╟я─я┐я│я▄, пёп╨я─п╟п╦п╫п╟: OSM XML - <a href="/osm">я│п╬п╠я│я┌п╡п╣п╫п╫я▀п╣</a>, п©п╬п╩п╦пЁп╬п╫я▀ п╬п╠я─п╣п╥п╨п╦ - я│п╬п╠я│я┌п╡п╣п╫п╫я▀п╣, п╫п╟ п╠п╟п╥п╣ пЁя─п╟п╫п╦я├ п╡ OSM, п╦я│я┘п╬п╢п╫я▀п╧ я└п╟п╧п╩ - <a href="http://gis-lab.info/projects/osm-export.html">Gis-Lab</a>
+<li>п╜я│я┌п╬п╫п╦я▐, п⌡п╟я┌п╡п╦я▐, п⌡п╦я┌п╡п╟, п°п╬п╩п╢п╬п╡п╟: OSM XML - <a href="http://download.geofabrik.de/osm/europe/">Geofabrik</a>.
+<li>п▓я│п╣ п╬я│я┌п╟п╩я▄п╫я▀п╣ я─п╣пЁп╦п╬п╫я▀: Gis-Lab PostGIS
 </ul>
 </ul>
-Статус планового обновления: <b><? print file_get_contents("status"); ?></b>
-<p>&copy; Идея принадлежит <a href="http://www.openstreetmap.org/user/Sergey%20Gladilin">Sergey Gladilin</a>. Разработка и реализация - <a href="http://www.openstreetmap.org/user/Sergey%20Gladilin">Sergey Gladilin</a> и <a href="http://www.openstreetmap.org/user/Alexandr%20Zeinalov">Alexandr Zeinalov</a>.
-<br>&copy; <a href="http://code.google.com/p/osmesr/">Исходный код</a> доступен по лицензии <a href="http://www.gnu.org/licenses/gpl.html">GPL 3.0</a>.
-<br>&copy; Использованные изображения частично основаны на картинках с сайтов <a href="http://wikipdia.org/">wikipedia.org</a> и
-<a href="http://wiki.openstreetmap.org/">wiki.openstreetmap.org</a> и доступны по лицензии
+п║я┌п╟я┌я┐я│ п©п╩п╟п╫п╬п╡п╬пЁп╬ п╬п╠п╫п╬п╡п╩п╣п╫п╦я▐: <b><? print file_get_contents("status"); ?></b>
+<p>&copy; п≤п╢п╣я▐ п©я─п╦п╫п╟п╢п╩п╣п╤п╦я┌ <a href="http://www.openstreetmap.org/user/Sergey%20Gladilin">Sergey Gladilin</a>. п═п╟п╥я─п╟п╠п╬я┌п╨п╟ п╦ я─п╣п╟п╩п╦п╥п╟я├п╦я▐ - <a href="http://www.openstreetmap.org/user/Sergey%20Gladilin">Sergey Gladilin</a> п╦ <a href="http://www.openstreetmap.org/user/Alexandr%20Zeinalov">Alexandr Zeinalov</a>.
+<br>&copy; <a href="http://code.google.com/p/osmesr/">п≤я│я┘п╬п╢п╫я▀п╧ п╨п╬п╢</a> п╢п╬я│я┌я┐п©п╣п╫ п©п╬ п╩п╦я├п╣п╫п╥п╦п╦ <a href="http://www.gnu.org/licenses/gpl.html">GPL 3.0</a>.
+<br>&copy; п≤я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╫я▀п╣ п╦п╥п╬п╠я─п╟п╤п╣п╫п╦я▐ я┤п╟я│я┌п╦я┤п╫п╬ п╬я│п╫п╬п╡п╟п╫я▀ п╫п╟ п╨п╟я─я┌п╦п╫п╨п╟я┘ я│ я│п╟п╧я┌п╬п╡ <a href="http://wikipdia.org/">wikipedia.org</a> п╦
+<a href="http://wiki.openstreetmap.org/">wiki.openstreetmap.org</a> п╦ п╢п╬я│я┌я┐п©п╫я▀ п©п╬ п╩п╦я├п╣п╫п╥п╦п╦
 <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA 3.0</a>.</p>

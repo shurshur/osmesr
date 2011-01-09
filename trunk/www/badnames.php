@@ -9,14 +9,14 @@ dbconn();
 <style>a { text-decoration: none; }</style>
 <table border=1 cellspacing=0>
 <tr>
- <td>ЕСР</td>
- <td>Экспресс</td>
- <td>Название</td>
- <td>РЖД</td>
- <td>УЗ</td>
- <td>ТР4к2</td>
- <td>ТР4к1</td>
- <td>ЯР</td>
+ <td>п∙п║п═</td>
+ <td>п╜п╨я│п©я─п╣я│я│</td>
+ <td>п²п╟п╥п╡п╟п╫п╦п╣</td>
+ <td>п═п√п■</td>
+ <td>пёп≈</td>
+ <td>п╒п═4п╨2</td>
+ <td>п╒п═4п╨1</td>
+ <td>п╞п═</td>
 </tr>
 
 <?
