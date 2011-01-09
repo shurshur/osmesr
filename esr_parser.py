@@ -155,9 +155,6 @@ class osmParser(handler.ContentHandler):
       row["user"] = str(self.tags['esr:user'])
     else:
       row['user'] = ''
-    if row['name'] == '':
-      print "%s %s: %s ... no name ..." % (self.vtype,self.osm_id,row['railway'])
-      return
     print "%s %s: %s %s" % (self.vtype,self.osm_id,row['railway'],row["name"])
     k = "%s-%s" % (row["type"],row["osm_id"])
     # case 1: record found
@@ -186,9 +183,9 @@ elif input == "@":
   for typ in [0,1,2]:
     # note: station must be NULL!!!
     if typ == 0:
-      cc.execute("SELECT osm_id,lat/10000000.,lon/10000000.,name,name_ru,alt_name,alt_name_ru,railway,transport,esr_user,station,old_name,official_name FROM %s_%s_attr,osm_nodes WHERE railway IN ('station','halt') AND (transport IN ('rail','train') OR transport IS NULL AND name IS NOT NULL) AND station IS NULL AND id=osm_id" % (source,typs[typ]))
+      cc.execute("SELECT osm_id,lat/10000000.,lon/10000000.,name,name_ru,alt_name,alt_name_ru,railway,transport,esr_user,station,old_name,official_name FROM %s_%s_attr,osm_nodes WHERE railway IN ('station','halt') AND (transport IN ('rail','train') OR transport IS NULL) AND station IS NULL AND id=osm_id" % (source,typs[typ]))
     else:
-      cc.execute("SELECT osm_id,0,0,name,name_ru,alt_name,alt_name_ru,railway,transport,esr_user,station,old_name,official_name FROM %s_%s_attr WHERE railway IN ('station','halt') AND (transport IN ('rail','train') OR transport IS NULL AND name IS NOT NULL) AND station IS NULL" % (source,typs[typ]))
+      cc.execute("SELECT osm_id,0,0,name,name_ru,alt_name,alt_name_ru,railway,transport,esr_user,station,old_name,official_name FROM %s_%s_attr WHERE railway IN ('station','halt') AND (transport IN ('rail','train') OR transport IS NULL) AND station IS NULL" % (source,typs[typ]))
     while 1:
       row = cc.fetchone()
       if not row:
