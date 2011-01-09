@@ -364,43 +364,43 @@ unset($output_rows);
 //////////////////////// ************* VIEW ***************** ///////////////////////////////
 ?>
 <style>a { text-decoration: none; }</style>
-<h1><a href="./">Единая сетевая разметка</a></h1>
+<h1><a href="./">п∙п╢п╦п╫п╟я▐ я│п╣я┌п╣п╡п╟я▐ я─п╟п╥п╪п╣я┌п╨п╟</a></h1>
 <h3><?
   echo $output["region_name"];
 ?></h3>
 <?
-  echo "<p>ЕСР (найдено/всего): ".$q_found."/".$q_stations." (".round($q_found*100./$q_stations)."%)</p>";
-  echo "<p>OSM (однозначно/неоднозначно/не найдено): ".$q_uniq."/".$q_nonuniq."/".$q_esrnf."</p>";
-  echo "<p>Обновлено: ".date("H:i:s d.m.Y",$updated)."</p>";
+  echo "<p>п∙п║п═ (п╫п╟п╧п╢п╣п╫п╬/п╡я│п╣пЁп╬): ".$q_found."/".$q_stations." (".round($q_found*100./$q_stations)."%)</p>";
+  echo "<p>OSM (п╬п╢п╫п╬п╥п╫п╟я┤п╫п╬/п╫п╣п╬п╢п╫п╬п╥п╫п╟я┤п╫п╬/п╫п╣ п╫п╟п╧п╢п╣п╫п╬): ".$q_uniq."/".$q_nonuniq."/".$q_esrnf."</p>";
+  echo "<p>п·п╠п╫п╬п╡п╩п╣п╫п╬: ".date("H:i:s d.m.Y",$updated)."</p>";
 ?>
-<a href='./region:<? echo $output["region_code"]; ?>:a'>По алфавиту</a> | <b>По участкам</b> | <a href="legend">Легенда</a><p>
+<a href='./region:<? echo $output["region_code"]; ?>:a'>п÷п╬ п╟п╩я└п╟п╡п╦я┌я┐</a> | <b>п÷п╬ я┐я┤п╟я│я┌п╨п╟п╪</b> | <a href="legend">п⌡п╣пЁп╣п╫п╢п╟</a><p>
 <table border="1" cellspacing="0" cellpadding="0">
   <tr>
     <th>
-      ЕСР
+      п∙п║п═
     </th>
     <th>
-      Станция
+      п║я┌п╟п╫я├п╦я▐
     </th>
     <th>
       OSM
     </th>
     <th>
-      Соседние станции
+      п║п╬я│п╣п╢п╫п╦п╣ я│я┌п╟п╫я├п╦п╦
     </th>
     <th>
-      Источник
+      п≤я│я┌п╬я┤п╫п╦п╨
     </th>
 <? if (!$output["single_region"]) { ?>
     <th>
-      Регион
+      п═п╣пЁп╦п╬п╫
     </th>
 <? } ?>
     <th>
-      Подчинение
+      п÷п╬п╢я┤п╦п╫п╣п╫п╦п╣
     </th>
     <th>
-      Искать
+      п≤я│п╨п╟я┌я▄
     </th>
     <th>
       &nbsp;
@@ -444,7 +444,7 @@ unset($output_rows);
 	  echo implode("\n", $osmnodes);
 	} else {
           if ($output_row["dup_esr"] != "")
-	    echo "<strike><a href=./esr:".$output_row["dup_esr"].">ЕСР: ".$output_row["dup_esr"]."</a></strike>";
+	    echo "<strike><a href=./esr:".$output_row["dup_esr"].">п∙п║п═: ".$output_row["dup_esr"]."</a></strike>";
 	  else
 	    echo "&nbsp;";
 	  }
@@ -478,13 +478,13 @@ unset($output_rows);
       <?
 	$tmp = array();
 	if (isset($output_row["names"]["rzd0"])) 
-	  $tmp[] = "РЖД";
+	  $tmp[] = "п═п√п■";
 	if (isset($output_row["names"]["tr4"])) 
-	  $tmp[] = "ТР4";
+	  $tmp[] = "п╒п═4";
 	if (isset($output_row["names"]["rwua"])) 
-	  $tmp[] = "УЗ";
+	  $tmp[] = "пёп≈";
 	if (isset($output_row["names"]["yarasp"])) 
-	  $tmp[] = "ЯР";
+	  $tmp[] = "п╞п═";
 
         if (count($tmp) > 0) {
 	  $tmp = implode(", ", $tmp);
@@ -512,10 +512,10 @@ unset($output_rows);
         $tmp = "";
 //        if ($output_row["railway_map_url"] != '') $tmp .= "<a href='".$output_row["railway_map_url"]."'>";
         $tmp .= "<a href='./railway:".$output_row["railway_id"]."'>";
-        $tmp .= $output_row["railway"]." ж.д.";
+        $tmp .= $output_row["railway"]." п╤.п╢.";
  //       if ($output_row["railway_map_url"] != '') $tmp .= "</a>";
         $tmp .= "</a>";
-	if ($output_row["division"] != '') $tmp .= ", ".$output_row["division"]." отд."; 
+	if ($output_row["division"] != '') $tmp .= ", ".$output_row["division"]." п╬я┌п╢."; 
         if ($output_row["dup_esr"] != "")
 	  $tmp = "<strike>$tmp</strike>";
         echo $tmp;
@@ -542,7 +542,7 @@ unset($output_rows);
 	$tmp2  = "";
 	if ($output["short_region_name"] != "")
 	  $tmp2  = $output["short_region_name"].", ";
-	$tmp2 .= "станция ".$output_row["name"];
+	$tmp2 .= "я│я┌п╟п╫я├п╦я▐ ".$output_row["name"];
 	$tmp2  = urlencode(iconv("koi8-r", "windows-1251", $tmp2));
 	$tmp2  = "<a href='http://maps.yandex.ru/?text=" . $tmp2;
 	$tmp2 .= "'>maps.yandex.ru</a>";
@@ -558,7 +558,7 @@ unset($output_rows);
     <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
       <?
         if ($output_row["closed"] != "") {
-	  echo "Закрыта (<a href='".urlencode("http://www.openstreetmap.org/user/".$output_row["closed"]);
+	  echo "п≈п╟п╨я─я▀я┌п╟ (<a href='".urlencode("http://www.openstreetmap.org/user/".$output_row["closed"]);
 	  echo "'>".$output_row["closed"]."</a>)";
         } else
 	  echo "&nbsp;";
@@ -576,7 +576,7 @@ unset($output_rows);
     $osmnodes[] = osmdataurl($osmnode["type"],$osmnode["osm_id"],$osmnode["name"],$osmnode["lat"],$osmnode["lon"],$osmnode["railway"]);
   }
   if (count($osmnodes) > 0) { 
-    echo "<h3>Найдено в OSM, не найдено в ЕСР</h3><ul><li>";
+    echo "<h3>п²п╟п╧п╢п╣п╫п╬ п╡ OSM, п╫п╣ п╫п╟п╧п╢п╣п╫п╬ п╡ п∙п║п═</h3><ul><li>";
     echo implode("</li><li>\n", $osmnodes);
     echo "</li></ul>";
   }

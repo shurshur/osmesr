@@ -7,11 +7,11 @@ Header("Content-Type: text/html; charset=$site_charset\n");
 dbconn();
 ?>
 <style>a { text-decoration: none; }</style>
-<h1><a href="./">Единая сетевая разметка</a></h1>
-<h2>Легенда</h2>
-<h3>Типы станций ЕСР</h3>
+<h1><a href="./">п∙п╢п╦п╫п╟я▐ я│п╣я┌п╣п╡п╟я▐ я─п╟п╥п╪п╣я┌п╨п╟</a></h1>
+<h2>п⌡п╣пЁп╣п╫п╢п╟</h2>
+<h3>п╒п╦п©я▀ я│я┌п╟п╫я├п╦п╧ п∙п║п═</h3>
 <ul>
-<li><img src="st0.png" /> неизвестный</li>
+<li><img src="st0.png" /> п╫п╣п╦п╥п╡п╣я│я┌п╫я▀п╧</li>
 <?
   $res = mysql_query("SELECT id,name FROM station_types");
   while($row = mysql_fetch_row($res))
@@ -19,25 +19,25 @@ dbconn();
   mysql_free_result($res);
 ?>
 </ul>
-<h3>Типы объектов</h3>
+<h3>п╒п╦п©я▀ п╬п╠я┼п╣п╨я┌п╬п╡</h3>
 <ul>
-<li><img src="node.png" /> точка</li>
-<li><img src="way.png" /> линия</li>
-<li><img src="relation.png" /> отношение</li>
+<li><img src="node.png" /> я┌п╬я┤п╨п╟</li>
+<li><img src="way.png" /> п╩п╦п╫п╦я▐</li>
+<li><img src="relation.png" /> п╬я┌п╫п╬я┬п╣п╫п╦п╣</li>
 </ul>
-<h3>Типы станций OSM</h3>
+<h3>п╒п╦п©я▀ я│я┌п╟п╫я├п╦п╧ OSM</h3>
 <ul>
 <li><img src="station.png" /> railway=station</li>
 <li><img src="halt.png" /> railway=halt</li>
 </ul>
-<h3>Источники</h3>
+<h3>п≤я│я┌п╬я┤п╫п╦п╨п╦</h3>
 <ul>
-<li><b>РЖД</b> - сайт РЖД (Российских Железных Дорог)</li>
-<li><b>УЗ</b> - сайт Укрзализныця (Украинских Железных Дорог)</li>
-<li><b>ТР4</b> - тарифное руководство N 4</li>
-<li><b>ЯР</b> - Яндекс.Расписания</li>
+<li><b>п═п√п■</b> - я│п╟п╧я┌ п═п√п■ (п═п╬я│я│п╦п╧я│п╨п╦я┘ п√п╣п╩п╣п╥п╫я▀я┘ п■п╬я─п╬пЁ)</li>
+<li><b>пёп≈</b> - я│п╟п╧я┌ пёп╨я─п╥п╟п╩п╦п╥п╫я▀я├я▐ (пёп╨я─п╟п╦п╫я│п╨п╦я┘ п√п╣п╩п╣п╥п╫я▀я┘ п■п╬я─п╬пЁ)</li>
+<li><b>п╒п═4</b> - я┌п╟я─п╦я└п╫п╬п╣ я─я┐п╨п╬п╡п╬п╢я│я┌п╡п╬ N 4</li>
+<li><b>п╞п═</b> - п╞п╫п╢п╣п╨я│.п═п╟я│п©п╦я│п╟п╫п╦я▐</li>
 </ul>
-<h3>Другое</h3>
+<h3>п■я─я┐пЁп╬п╣</h3>
 <ul>
-<li><img src="edit.png"> ссылка на JOSM Remote Control</li>
+<li><img src="edit.png"> я│я│я▀п╩п╨п╟ п╫п╟ JOSM Remote Control</li>
 </ul>

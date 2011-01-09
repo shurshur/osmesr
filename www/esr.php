@@ -4,7 +4,7 @@
   Header("Content-Type: text/html; charset=$site_charset\n");
 ?>
 <style>a { text-decoration: none; }</style>
-<h1><a href='./'>Единая сетевая разметка</a></h1>
+<h1><a href='./'>п∙п╢п╦п╫п╟я▐ я│п╣я┌п╣п╡п╟я▐ я─п╟п╥п╪п╣я┌п╨п╟</a></h1>
 <?php
 
 dbconn();
@@ -55,24 +55,24 @@ if(mysql_num_rows($res)<=0)
   die;
 $row = mysql_fetch_assoc($res);
 // Dirty hack by Glad
-// $row["name_tr4k2"] = "(данные еще не обработаны)";
+// $row["name_tr4k2"] = "(п╢п╟п╫п╫я▀п╣ п╣я┴п╣ п╫п╣ п╬п╠я─п╟п╠п╬я┌п╟п╫я▀)";
 // End dirty hack
 print "<h2>".$row['esr'].": ".$row['name']."</h2>\n";
 
 $fields=array(
-  "esr" => "Код ЕСР",
-  "express_code" => "Код Экспресс-3",
-  "region" => "Регион",
-  "railway" => "Железная дорога",
-  "division" => "Отделение",
-  "name" => "Название",
-  "name_rzd0" => "Название (РЖД)",
-  "name_tr4k2" => "Название (Тарифное руководство N4)",
-  "name_tr4k1" => "Название (ТР4, справочник тарифных расстояний)",
-  "name_rwua" => "Название (Укрзализныци)",
-  "name_yarasp" => "Название (Яндекс.Расписания)",
-  "yarasp_addr" => "Адрес (Яндекс.Расписания)",
-  "stype" => "Статус",
+  "esr" => "п п╬п╢ п∙п║п═",
+  "express_code" => "п п╬п╢ п╜п╨я│п©я─п╣я│я│-3",
+  "region" => "п═п╣пЁп╦п╬п╫",
+  "railway" => "п√п╣п╩п╣п╥п╫п╟я▐ п╢п╬я─п╬пЁп╟",
+  "division" => "п·я┌п╢п╣п╩п╣п╫п╦п╣",
+  "name" => "п²п╟п╥п╡п╟п╫п╦п╣",
+  "name_rzd0" => "п²п╟п╥п╡п╟п╫п╦п╣ (п═п√п■)",
+  "name_tr4k2" => "п²п╟п╥п╡п╟п╫п╦п╣ (п╒п╟я─п╦я└п╫п╬п╣ я─я┐п╨п╬п╡п╬п╢я│я┌п╡п╬ N4)",
+  "name_tr4k1" => "п²п╟п╥п╡п╟п╫п╦п╣ (п╒п═4, я│п©я─п╟п╡п╬я┤п╫п╦п╨ я┌п╟я─п╦я└п╫я▀я┘ я─п╟я│я│я┌п╬я▐п╫п╦п╧)",
+  "name_rwua" => "п²п╟п╥п╡п╟п╫п╦п╣ (пёп╨я─п╥п╟п╩п╦п╥п╫я▀я├п╦)",
+  "name_yarasp" => "п²п╟п╥п╡п╟п╫п╦п╣ (п╞п╫п╢п╣п╨я│.п═п╟я│п©п╦я│п╟п╫п╦я▐)",
+  "yarasp_addr" => "п░п╢я─п╣я│ (п╞п╫п╢п╣п╨я│.п═п╟я│п©п╦я│п╟п╫п╦я▐)",
+  "stype" => "п║я┌п╟я┌я┐я│",
 );
 
 if($row['express_code'])
@@ -106,7 +106,7 @@ if (!($res = mysql_query($query)))
 
 $cnt = 0;
 while($row = mysql_fetch_row($res)) {
-  print "<tr><td align=right>".(!$cnt?"<b>Соседние станции (ТР4):</b>":"&nbsp;")."</td><td>&nbsp;</td>\n";
+  print "<tr><td align=right>".(!$cnt?"<b>п║п╬я│п╣п╢п╫п╦п╣ я│я┌п╟п╫я├п╦п╦ (п╒п═4):</b>":"&nbsp;")."</td><td>&nbsp;</td>\n";
   print "<td align=left><a href=\"./esr:".$row[0]."\">".$row[0]."</a>&nbsp;".$row[1]."</td></tr>\n";
   $cnt++;
 }
@@ -136,7 +136,7 @@ $query = "
 if (!($res = mysql_query($query)))
   die ("Error: ".mysql_error()."\n");
 
-print "<h3>Найдены в OSM:<h3>";
+print "<h3>п²п╟п╧п╢п╣п╫я▀ п╡ OSM:<h3>";
 print("<table border=0>");
 $types = array(0=>"node",1=>"way");
 

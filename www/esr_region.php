@@ -157,35 +157,35 @@ mysql_free_result($res);
 //////////////////////// ************* VIEW ***************** ///////////////////////////////
 ?>
 <style>a { text-decoration: none; }</style>
-<h1><a href="./">Единая сетевая разметка</a></h1>
+<h1><a href="./">п∙п╢п╦п╫п╟я▐ я│п╣я┌п╣п╡п╟я▐ я─п╟п╥п╪п╣я┌п╨п╟</a></h1>
 <h3><?
   if ($output["region_name"] != "")
     echo $output["region_name"];
   else
-    echo "Станции, регион которых не установлен";
+    echo "п║я┌п╟п╫я├п╦п╦, я─п╣пЁп╦п╬п╫ п╨п╬я┌п╬я─я▀я┘ п╫п╣ я┐я│я┌п╟п╫п╬п╡п╩п╣п╫";
 ?></h3>
 <table border="1" cellspacing="0" cellpadding="0">
   <tr>
     <th>
-      ЕСР
+      п∙п║п═
     </th>
     <th>
-      Станция
+      п║я┌п╟п╫я├п╦я▐
     </th>
     <th>
-      Статус
+      п║я┌п╟я┌я┐я│
     </th>
     <th>
-      Источник
+      п≤я│я┌п╬я┤п╫п╦п╨
     </th>
     <th>
-      Соседние станции
+      п║п╬я│п╣п╢п╫п╦п╣ я│я┌п╟п╫я├п╦п╦
     </th>
     <th>
-      Подчинение
+      п÷п╬п╢я┤п╦п╫п╣п╫п╦п╣
     </th>
     <th>
-      Искать
+      п≤я│п╨п╟я┌я▄
     </th>
   </tr>
 <? $color = array(0 => "white", 1 => "lightgreen", 2 => "yellow"); ?>
@@ -221,13 +221,13 @@ mysql_free_result($res);
       <?
 	$tmp = array();
 	if (isset($output_row["names"]["rzd0"])) 
-	  $tmp[] = "РЖД";
+	  $tmp[] = "п═п√п■";
 	if (isset($output_row["names"]["tr4"])) 
-	  $tmp[] = "ТР4";
+	  $tmp[] = "п╒п═4";
 	if (isset($output_row["names"]["rwua"])) 
-	  $tmp[] = "УЗ";
+	  $tmp[] = "пёп≈";
 	if (isset($output_row["names"]["yarasp"])) 
-	  $tmp[] = "ЯР";
+	  $tmp[] = "п╞п═";
 
         if (count($tmp) > 0) {
 	  $tmp = implode(", ", $tmp);
@@ -265,10 +265,10 @@ mysql_free_result($res);
         $tmp = "";
 //        if ($output_row["railway_map_url"] != '') $tmp .= "<a href='".$output_row["railway_map_url"]."'>";
         $tmp .= "<a href='./railway:".$output_row["railway_id"]."'>";
-        $tmp .= $output_row["railway"]." ж.д.";
+        $tmp .= $output_row["railway"]." п╤.п╢.";
 //        if ($output_row["railway_map_url"] != '') $tmp .= "</a>";
         $tmp .= "</a>";
-	if ($output_row["division"] != '') $tmp .= ", ".$output_row["division"]." отд."; 
+	if ($output_row["division"] != '') $tmp .= ", ".$output_row["division"]." п╬я┌п╢."; 
         if ($output_row["dup_esr"] != "")
 	  $tmp = "<strike>$tmp</strike>";
         echo $tmp;
@@ -292,7 +292,7 @@ mysql_free_result($res);
           $tmp2 .= substr($output_row["esr"],0,5)."'>gdevagon.ru</a>";
 	  $tmp[] .= $tmp2;
 	}
-	$tmp2  = $output["region_name"].", станция ".$output_row["name"];
+	$tmp2  = $output["region_name"].", я│я┌п╟п╫я├п╦я▐ ".$output_row["name"];
 	$tmp2  = urlencode(iconv("koi8-r", "windows-1251", $tmp2));
 	$tmp2  = "<a href='http://maps.yandex.ru/?text=" . $tmp2;
 	$tmp2 .= "'>maps.yandex.ru</a>";
