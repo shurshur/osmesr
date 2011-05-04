@@ -26,15 +26,24 @@ function osmdataurl($type,$id,$name,$lat,$lon,$railway="station") {
     $top = $lat+0.0012;
     $url = "http://127.0.0.1:8111/load_and_zoom?left=$left&right=$right&top=$top&bottom=$bottom&select=node$id";
     $url = preg_replace("/,/",".",$url);
-    $link = "&nbsp;<a href=\"$url\"><img border=0 src=\"edit.png\"/></a>";
+    $link = "&nbsp;<a href=\"$url\" target=\"_josmremote\"><img border=0 src=\"edit.png\"/></a>";
   } elseif ($type == 1) {
     $url = "http://127.0.0.1:8111/import?url=http://www.openstreetmap.org/api/0.6/way/$id/full";
-    $link = "&nbsp;<a href=\"$url\"><img border=0 src=\"edit.png\"/></a>";
+    $link = "&nbsp;<a href=\"$url\" target=\"_josmremote\"><img border=0 src=\"edit.png\"/><ga>";
   } elseif ($type == 2) {
     $url = "http://127.0.0.1:8111/import?url=http://www.openstreetmap.org/api/0.6/relation/$id/full";
-    $link = "&nbsp;<a href=\"$url\"><img border=0 src=\"edit.png\"/></a>";
+    $link = "&nbsp;<a href=\"$url\" target=\"_josmremote\"><img border=0 src=\"edit.png\"/></a>";
   }
   return "<img src=\"".$types[$type].".png\"><img src=\"$railway.png\">&nbsp;<a href=\"http://www.openstreetmap.org/browse/".$types[$type]."/$id\">".$name."</a>$link\n";
+}
+
+function addhiddenframe() {
+  ?>
+<div style="display: none">
+<iframe name="_josmremote">
+</iframe>
+</div>
+  <?
 }
 
 ?>
