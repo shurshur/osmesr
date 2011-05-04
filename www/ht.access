@@ -17,3 +17,6 @@ RewriteRule ^region:(\w+):a$ region.php?region=$1 [L,QSA]
 RewriteCond %{REQUEST_URI} railway:(\w+) [NC]
 RewriteRule ^railway:(\w+)$ railway.php?id=$1 [L,QSA]
 
+RewriteCond %{REQUEST_URI} legend [NC]
+RewriteRule ^legend$ legend.php [L,QSA]
+

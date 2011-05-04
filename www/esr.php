@@ -2,6 +2,7 @@
   require_once("config.php");
   require_once("lib.php");
   Header("Content-Type: text/html; charset=$site_charset\n");
+  addhiddenframe();
 ?>
 <style>a { text-decoration: none; }</style>
 <h1><a href='./'>Единая сетевая разметка</a></h1>

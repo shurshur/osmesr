@@ -7,6 +7,7 @@ $output = array();
 Header("Content-Type: text/html; charset=$site_charset\n"); 
 setlocale(LC_ALL, $site_locale);
 setlocale(LC_NUMERIC, "C");
+addhiddenframe();
 
 dbconn();
 

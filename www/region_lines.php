@@ -6,6 +6,7 @@ require_once("lib.php");
 $output = array();
 Header("Content-Type: text/html; charset=$site_charset\n"); 
 setlocale(LC_ALL, $site_locale);
+addhiddenframe();
 
 dbconn();
 
