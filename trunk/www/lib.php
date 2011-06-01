@@ -29,7 +29,7 @@ function osmdataurl($type,$id,$name,$lat,$lon,$railway="station") {
     $link = "&nbsp;<a href=\"$url\" target=\"_josmremote\"><img border=0 src=\"edit.png\"/></a>";
   } elseif ($type == 1) {
     $url = "http://127.0.0.1:8111/import?url=http://www.openstreetmap.org/api/0.6/way/$id/full";
-    $link = "&nbsp;<a href=\"$url\" target=\"_josmremote\"><img border=0 src=\"edit.png\"/><ga>";
+    $link = "&nbsp;<a href=\"$url\" target=\"_josmremote\"><img border=0 src=\"edit.png\"/></a>";
   } elseif ($type == 2) {
     $url = "http://127.0.0.1:8111/import?url=http://www.openstreetmap.org/api/0.6/relation/$id/full";
     $link = "&nbsp;<a href=\"$url\" target=\"_josmremote\"><img border=0 src=\"edit.png\"/></a>";
