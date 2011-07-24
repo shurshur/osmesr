@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# vim:encoding=utf-8:shiftwidth=2:cindent
+# vim:encoding=utf-8:shiftwidth=2:cindent:et
 import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")          # a hack to support UTF-8 
@@ -119,7 +119,7 @@ class osmParser(handler.ContentHandler):
         self.lon = str(attrs.get('lon'))
       else:
         self.lat = "0";
-	self.lon = "0";
+        self.lon = "0";
       self.tags = dict()
     if name == 'tag':
       self.tags[attrs.get('k')] = str(attrs.get('v'))
@@ -167,7 +167,7 @@ class osmParser(handler.ContentHandler):
           osmdata[k][kk] = row[kk]
           dirty = 1
           print "FIXME ...... %s [%s] | [%s]" % (kk,row[kk],osmdata[k][kk])
-	  print "FIXME types: " + str(typeof(row[kk])) + " " + str(typeof(osmdata[k][kk]))
+          print "FIXME types: " + str(typeof(row[kk])) + " " + str(typeof(osmdata[k][kk]))
       osmdata[k]['st'] = dirty
     # case 2: record not found, add new
     else:
@@ -223,7 +223,7 @@ elif input == "@":
             osmdata[k][kk] = row[kk]
             dirty = 1
             print "FIXME ...... %s [%s] | [%s]" % (kk,row[kk],osmdata[k][kk])
-	    print "FIXME types: " + str(typeof(row[kk])) + " " + str(typeof(osmdata[k][kk]))
+            print "FIXME types: " + str(typeof(row[kk])) + " " + str(typeof(osmdata[k][kk]))
         osmdata[k]['st'] = dirty
       else:
         print "NEW ROW %s" % k

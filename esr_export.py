@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# vim:encoding=utf-8:shiftwidth=2:cindent
+# vim:encoding=utf-8:shiftwidth=2:cindent:et
 import sys
 import MySQLdb
 import MySQLdb.cursors
