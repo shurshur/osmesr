@@ -498,7 +498,7 @@ mysql_free_result($res);
 	if ($output["short_region_name"] != "")
 	  $tmp2  = $output["short_region_name"].", ";
 	$tmp2 .= "станция ".$output_row["name"];
-	$tmp2  = urlencode(iconv("koi8-r", "windows-1251", $tmp2));
+	$tmp2  = urlencode(iconv($site_charset, "windows-1251", $tmp2));
 	$tmp2  = "<a href='http://maps.yandex.ru/?text=" . $tmp2;
 	$tmp2 .= "'>maps.yandex.ru</a>";
 	$tmp[] = $tmp2;
