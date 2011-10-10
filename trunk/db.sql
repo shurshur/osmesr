@@ -3,6 +3,7 @@ create table if not exists regions (
   name varchar(255) not null default '',
   esr_name varchar(255) not null,
   source varchar(255) not null,
+  iso3166 varchar(6) not null default '',
   country varchar(255) not null,
   q_stations int not null default 0,
   q_uniq int not null default 0,

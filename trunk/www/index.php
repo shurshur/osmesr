@@ -26,7 +26,8 @@ $query = "
     q_nonuniq,
     q_esrnf,
     updated,
-    q_found
+    q_found,
+    iso3166
   FROM
     regions
   WHERE
@@ -63,7 +64,7 @@ while ($r = mysql_fetch_row($res))
   $esr_name_list = implode(", ", $esr_names);
   $regions[] = array("esr_names" => $esr_name_list, "name" => $r[0], "source" => $r[1], "country" => $r[2],
                      "q_stations" => $r[3], "q_uniq" => $r[4], "q_nonuniq" => $r[5], "q_esrnf" => $r[6], "updated" => $r[7],
-		     "q_found" => $r[8]);
+		     "q_found" => $r[8], "iso3166" => $r[9]);
   $q_stations += $r[3];
   $q_found += $r[8];
   $q_uniq += $r[4];
@@ -81,7 +82,8 @@ $query = "
     q_nonuniq,
     q_esrnf,
     updated,
-    q_found
+    q_found,
+    iso3166
   FROM
     regions
   WHERE 
@@ -95,7 +97,7 @@ while ($r = mysql_fetch_row($res))
 {
   $tmp = explode(" - ", $r[0]);
   $regions[] = array("name" => $tmp[0], "esr_names" => $tmp[0], "source" => $r[1], "country" => "Неразобранное", "id" => $r[2],
-                     "q_stations" => $r[4], "q_uniq" => $r[4], "q_nonuniq" => $r[5], "q_esrnf" => $r[6], "updated" => $r[7], "q_found" => $r[8]);
+                     "q_stations" => $r[4], "q_uniq" => $r[4], "q_nonuniq" => $r[5], "q_esrnf" => $r[6], "updated" => $r[7], "q_found" => $r[8], "iso3166" => $r[9]);
   $q_stations += $r[3];
   $q_found += $r[8];
   $q_uniq += $r[4];
@@ -121,7 +123,7 @@ $r = mysql_fetch_row($res);
 if ($r[0] > 0) 
   $regions[] = array("name" => "*** (регион не установлен) ***", "esr_names" => "*** (регион не установлен) ***", "source" => '', "country" => "Неразобранное", "id" => 0, "q_stations" => $r[0], "q_uniq" => 0, "q_nonuniq" => 0, "updated" => "", "q_found" => "");
 
-echo "<table border=1 cellspacing=0>\n<tr><td align=center><b>Регион</b></td><td align=center><b>%%</b></td><td align=center><b>ЕСР</b></td><td align=center><b>Одн.</b></td><td align=center><b>Неодн.</b></td><td align=center><b>Нет<b></td><td align=center><b>Обновлено</b></tr>\n";
+echo "<table border=1 cellspacing=0>\n<tr><td align=center><b><font size=-1>ISO3166</font></b><td align=center><b>Регион</b></td><td align=center><b>%%</b></td><td align=center><b>ЕСР</b></td><td align=center><b>Одн.</b></td><td align=center><b>Неодн.</b></td><td align=center><b>Нет<b></td><td align=center><b>Обновлено</b></tr>\n";
 
 $country = '';
 foreach ($regions as $region)
@@ -129,14 +131,14 @@ foreach ($regions as $region)
   if ($region["country"]!=$country) 
   {
     $country = $region["country"];
-    echo "<tr><td><b><font size=5>".$country."</font></b></td>";
+    echo "<tr><td>&nbsp;</td><td><b><font size=5>".$country."</font></b></td>";
     for($i=0;$i<6;$i++) print "<td>&nbsp;</td>";
     print "</tr>\n";
   }
   if ($region["source"]!="") 
   {
     ?>
-      <tr><td><? if($region["country"]) print "&raquo;"; ?> <a href="./region:<?=$region["source"]?>:l">
+      <tr><td><? if($region["iso3166"]) print $region["iso3166"]; else print "&nbsp;"; ?></td><td><? if($region["country"]) print "&raquo;"; ?> <a href="./region:<?=$region["source"]?>:l">
         <?=$region["name"]?>
       </a></td>
     <?
@@ -161,7 +163,7 @@ foreach ($regions as $region)
 $p = 0;
 if ($q_stations)
   $p = round($q_found*100/$q_stations);
-echo "<tr><td><b>Всего</b></td><td align=right>$p%</td><td align=right>$q_found/<br>$q_stations</td><td align=right>$q_uniq</td><td align=right>$q_nonuniq</td><td align=right>$q_esrnf</td><td>&nbsp;</td></tr></table>\n";
+echo "<tr><td>&nbsp;</td><td><b>Всего</b></td><td align=right>$p%</td><td align=right>$q_found/<br>$q_stations</td><td align=right>$q_uniq</td><td align=right>$q_nonuniq</td><td align=right>$q_esrnf</td><td>&nbsp;</td></tr></table>\n";
 
 ?>
 <ul>
