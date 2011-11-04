@@ -12,6 +12,7 @@ import MySQLdb
 import MySQLdb.cursors
 import _mysql_exceptions
 import psycopg2
+from psycopg2.extensions import adapt
 from esr_config import *
 
 try:
@@ -45,6 +46,12 @@ def cname_esr(name):
 def cname_osm(name):
   return cname(name)
 
+def sqlesc(value):
+  adapted = adapt(value)
+  if hasattr(adapted, 'getquoted'):
+    adapted = adapted.getquoted()
+  return adapted
+
 # ===
 #  Stage 1. Initializing
 # ===
@@ -60,14 +67,16 @@ Usage: ./esr_parser.py SOURCE INPUT
 
 Where:
   SOURCE - source name of region
-  INPUT - file name or - for stdin or @ for PostGIS
+  INPUT - file name or - for stdin or @ for old gis-lab PostGIS or @ISO3166 for new local PostGIS
 """
   sys.exit(1)
 
 print "Run esr parser for source='%s' from input='%s'" % (source, input)
 
 if input == "@":
-  pg=psycopg2.connect("dbname='%s' user='%s' host='%s' password='%s'" % (postgis_data,postgis_user,postgis_host,postgis_pass))
+  pg = psycopg2.connect("dbname='%s' user='%s' host='%s' password='%s'" % (postgis_data,postgis_user,postgis_host,postgis_pass))
+elif input[0] == "@":
+  pg = psycopg2.connect("dbname='%s' user='%s' host='%s' password='%s'" % (local_data,local_user,local_host,local_pass))
 
 db=MySQLdb.connect(osmesr_host,osmesr_user,osmesr_pass,osmesr_data,cursorclass=MySQLdb.cursors.DictCursor)
 db.query("SET NAMES utf8")
@@ -176,21 +185,36 @@ class osmParser(handler.ContentHandler):
 
 if input == "-":
   a = osmParser(sys.stdin, source)
-elif input == "@":
+elif input[0] == "@":
+  if input == "@":
+    oldpg = 1
+  else:
+    oldpg = 0
+    iso = input[1:]
   cc = pg.cursor()
   typs = ["point","line","poly"]
+  typn = ["point","line","polygon"]
   typi = [0,1,1]
   for typ in [0,1,2]:
     # note: station must be NULL!!!
     if typ == 0:
-      cc.execute("SELECT osm_id,lat/10000000.,lon/10000000.,name,name_ru,alt_name,alt_name_ru,railway,transport,esr_user,station,old_name,official_name FROM %s_%s_attr,osm_nodes WHERE railway IN ('station','halt') AND (transport IN ('rail','train') OR transport IS NULL) AND station IS NULL AND id=osm_id" % (source,typs[typ]))
+      if oldpg:
+        cc.execute("SELECT osm_id,ST_Y(ST_Transform(st_intersection,4326)) AS lat,ST_X(ST_Transform(st_intersection,4326)) AS lon,name,name_ru,alt_name,alt_name_ru,railway,transport,esr_user,station,old_name,official_name FROM %s_%s_attr,osm_nodes WHERE railway IN ('station','halt') AND (transport IN ('rail','train') OR transport IS NULL) AND station IS NULL AND id=osm_id" % (source,typs[typ]))
+      else:
+        cc.execute("SELECT osm_id,ST_Y(ST_Transform(geom,4326)) AS lat,ST_X(ST_Transform(geom,4326)) AS lon,tags->'name'AS name,tags->'name:ru' AS name_ru,tags->'alt_name' AS alt_name,tags->'alt_name:ru' AS alt_name_ru,tags->'railway' AS railway,tags->'transport' AS transport,tags->'esr:user' AS esr_user,tags->'station' AS station,tags->'old_name' AS old_name,tags->'official_name' AS official_name FROM esr_data WHERE osm_type=0 AND iso3166=%s" % sqlesc(iso))
     else:
-      cc.execute("SELECT osm_id,0,0,name,name_ru,alt_name,alt_name_ru,railway,transport,esr_user,station,old_name,official_name FROM %s_%s_attr WHERE railway IN ('station','halt') AND (transport IN ('rail','train') OR transport IS NULL) AND station IS NULL" % (source,typs[typ]))
+      if oldpg:
+        cc.execute("SELECT osm_id,ST_Y(ST_Centroid(st_intersection)),ST_X(ST_Centroid(st_intersection)),name,name_ru,alt_name,alt_name_ru,railway,transport,esr_user,station,old_name,official_name FROM %s_%s_attr WHERE railway IN ('station','halt') AND (transport IN ('rail','train') OR transport IS NULL) AND station IS NULL" % (source,typs[typ]))
+      else:
+        cc.execute("SELECT osm_id,ST_Y(ST_Centroid(ST_Transform(geom,4326))),ST_X(ST_Centroid(ST_Transform(geom,4326))),tags->'name'AS name,tags->'name:ru' AS name_ru,tags->'alt_name' AS alt_name,tags->'alt_name:ru' AS alt_name_ru,tags->'railway' AS railway,tags->'transport' AS transport,tags->'esr:user' AS esr_user,tags->'station' AS station,tags->'old_name' AS old_name,tags->'official_name' AS official_name FROM esr_data WHERE osm_type=%d AND iso3166=%s" % (typ, sqlesc(iso)))
     while 1:
       row = cc.fetchone()
       if not row:
         break
       osm_id,lat,lon,name,name_ru,alt_name,alt_name_ru,railway,transport,esr_user,station,old_name,official_name = row
+      if not oldpg:
+        if not ((transport in ['rail','train'] or transport == "" or not transport) and (station == "" or not station)):
+          continue
       row = {}
       row['osm_id'] = osm_id
       row['lat'] = str(lat)
