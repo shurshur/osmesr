@@ -513,7 +513,7 @@ mysql_free_result($res);
     <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
       <?
         if ($output_row["closed"] != "") {
-          echo "Закрыта (<a href='".urlencode("http://www.openstreetmap.org/user/".$output_row["closed"]);
+          echo "Закрыта (<a href='http://www.openstreetmap.org/user/".urlencode($output_row["closed"]);
           echo "'>".$output_row["closed"]."</a>)";
         } else
           echo "&nbsp;";
