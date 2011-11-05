@@ -27,7 +27,8 @@ SELECT
   regions.name AS region,
   countries.esr_name AS country,
   railways.name AS railway,
-  divisions.name AS division
+  divisions.name AS division,
+  iso3166
 FROM
   stations
   LEFT JOIN regions ON stations.region_id = regions.id
