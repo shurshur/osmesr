@@ -118,6 +118,11 @@ while ($r = mysql_fetch_row($res))
 unset($output_row);
 mysql_free_result($res);
 
+if (count($esrs) < 1) {
+  print "В регионе нет станций!";
+  exit;
+}
+
 $esr_list = implode(",", $esrs);
 
 $query = "
