@@ -5,6 +5,7 @@ require_once("lib.php");
 //////////////////////// ************* MODEL ***************** ///////////////////////////////
 $output = array();
 Header("Content-Type: text/html; charset=$site_charset\n"); 
+date_default_timezone_set("Europe/Moscow");
 setlocale(LC_ALL, $site_locale);
 addhiddenframe();
 
@@ -461,14 +462,16 @@ unset($output_rows);
         $neighbours = array();
         foreach ($output_row["neighbour"] as $neighbour) {
 	  $tmp = $neighbour["name"]; 
-          if ($neighbour["region_code"] != "") {
+          if (isset($neighbour["region_code"]) && $neighbour["region_code"] != "") {
 	    $tmp = "<a href=\"./region:".$neighbour["region_code"].":l#".$neighbour["esr"]."\">".$tmp."</a>";
-	    $tmp .= " (<a href=\"./region:";
-	    $tmp .= $neighbour["region_code"].":l\">".$neighbour["region_name"]."</a>)";
-	  } elseif ($neighbour["region_id"] === "0") {
+	    #$tmp .= " (<a href=\"./region:";
+	    #$tmp .= $neighbour["region_code"].":l\">".$neighbour["region_name"]."</a>)";
+	    $tmp .= " (".$neighbour["region_name"].")";
+	  } elseif (isset($neighbour["region_id"]) && $neighbour["region_id"] === "0") {
 	    $tmp = "<a href=\"./region:".$neighbour["region_id"]."#".$neighbour["esr"]."\">".$tmp."</a>";
-	    $tmp .= " (<a href=\"./region:";
-	    $tmp .= $neighbour["region_id"]."\">???</a>)";
+	    #$tmp .= " (<a href=\"./region:";
+	    #$tmp .= $neighbour["region_id"]."\">???</a>)";
+            $tmp .= " (???)";
 	  } else {
 	    $tmp = "<a href=\"#".$neighbour["esr"]."\">".$tmp."</a>";
 	  }
