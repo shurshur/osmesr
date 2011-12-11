@@ -2,10 +2,21 @@
   require_once("config.php");
   require_once("lib.php");
   Header("Content-Type: text/html; charset=$site_charset\n");
+  date_default_timezone_set("Europe/Moscow");
 ?>
 <style>a { text-decoration: none; }</style>
 <h1>Единая сетевая разметка</h1>
-<p><a href="http://forum.openstreetmap.org/viewtopic.php?id=9084">Подробнее</a></p>
+<p>Единая сетевая разметка (ЕСР) — система цифрового обозначения станций на территории 
+стран бывшего СССР.</p>
+<p><a href="http://forum.openstreetmap.org/viewtopic.php?id=9084">Обсуждение на форуме OpenStreetMap</a>.</p>
+<p>Данные в CSV: <a href="esr.csv">ЕСР</a>, <a href="osm2esr.csv">OSM-ЕСР</a>, <a href="express.csv">Экспресс</a>.<p>
+
+<p>
+<form action="search" method="post">
+Поиск: <input type=text name=q value="" size=32>
+<input type=submit value=Поиск>
+</form>
+</p>
 <?php
 
 dbconn();

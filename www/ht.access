@@ -20,3 +20,13 @@ RewriteRule ^railway:(\w+)$ railway.php?id=$1 [L,QSA]
 RewriteCond %{REQUEST_URI} legend [NC]
 RewriteRule ^legend$ legend.php [L,QSA]
 
+RewriteCond %{REQUEST_URI} badnames [NC]
+RewriteRule ^badnames$ badnames.php [L,QSA]
+
+RewriteCond %{REQUEST_URI} badesr [NC]
+RewriteRule ^badesr$ badesr.php [L,QSA]
+
+RewriteCond %{REQUEST_URI} search [NC]
+RewriteRule ^search$ search.php [L,QSA]
+RewriteRule ^search:(.+)$ search.php?q=$1&r=1 [L,QSA]
+

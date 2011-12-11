@@ -8,7 +8,7 @@ dbconn();
 
 $query = "
   SELECT
-    esr,name
+    esr,name,dup_esr
   FROM
     stations
 ";
@@ -16,6 +16,7 @@ $res = mysql_query($query);
 if (!$res)
   die("Error: " . mysql_error());
 ?>
+<style>a { text-decoration: none; }</style>
 <h1>Невалидные ЕСР-коды</h1>
 Эти коды не проходят проверку по контрольной цифре. Однако вариант с правильно
 выставленной контрольной цифрой не обязательно будет правильным, так как опечатка возможна
@@ -26,6 +27,7 @@ if (!$res)
 
 while ($r = mysql_fetch_row($res)) {
   $name = $r[1];
+  $d = $r[2];
   $r = $r[0];
   $c = $r[0] + $r[1] * 2 + $r[2] * 3 + $r[3] * 4 + $r[4] * 5;
   $o = $c % 11;
@@ -36,8 +38,11 @@ while ($r = mysql_fetch_row($res)) {
       $o = 0;
   } 
   $valid = substr($r,0,5).$o;
-  if ($r[5] != $o) 
-    echo "<tr><td><a href=./esr:$r>$r</a> ($name)</td><td><a href=./esr:$valid>$valid</a></td></tr>\n";
+  if ($r[5] != $o) {
+    if ($d) $rv = "<s>$r</s></a> -&gt; <a href=./esr:$d>$d";
+    else $rv = $r;
+    echo "<tr><td><a href=./esr:$r>$rv</a> ($name)</td><td><a href=./esr:$valid>$valid</a></td></tr>\n";
+  }
 
 }
 
