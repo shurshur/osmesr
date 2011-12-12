@@ -30,3 +30,6 @@ RewriteCond %{REQUEST_URI} search [NC]
 RewriteRule ^search$ search.php [L,QSA]
 RewriteRule ^search:(.+)$ search.php?q=$1&r=1 [L,QSA]
 
+RewriteCond %{REQUEST_URI} express:?([0-9]+) [NC]
+RewriteRule ^express:?([0-9]+)$ express.php?exp=$1 [L,QSA]
+
