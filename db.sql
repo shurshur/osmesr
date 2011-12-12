@@ -120,7 +120,8 @@ create table if not exists express (
   name varchar(255) not null default '',
   tutu_lat float not null default 0,
   tutu_lon float not null default 0,
-  is_city int not null default 0
+  is_city int not null default 0,
+  alias varchar(255) not null default ''
 );
 
 create table if not exists `lines` (

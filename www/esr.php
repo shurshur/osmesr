@@ -77,7 +77,7 @@ $fields=array(
 );
 
 if($row['express_code'])
-  $row['express_code'] = $row['express_code']." (".$row['express_name'].")";
+  $row['express_code'] = "<a href=./express:".$row['express_code'].">".$row['express_code']."</a> (".$row['express_name'].")";
 
 if($row['map_url'])
   $row['railway'] = "<a href=\"".$row["map_url"]."\">".$row['railway']."</a>";
