@@ -30,6 +30,8 @@ if($q) {
 
   if (preg_match('/^[0-9]{5,6}$/',$q)) {
     $filter = "esr LIKE '".$q."%'";
+  } elseif (preg_match('/^[0-9]{7}$/',$q)) {
+    $filter = "express_code LIKE '".$q."%'";
   } else {
     $cols = array("stations.name","name_rzd0","name_tr4k1","name_tr4k2","name_rwua","name_yarasp");
     $filter = array();
