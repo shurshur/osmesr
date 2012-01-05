@@ -143,7 +143,35 @@ foreach ($regions as $region)
   {
     $country = $region["country"];
     echo "<tr><td>&nbsp;</td><td><b><font size=5>".$country."</font></b></td>";
-    for($i=0;$i<6;$i++) print "<td>&nbsp;</td>";
+    $q = "SELECT * FROM regions WHERE country='$country' GROUP BY source";
+    $cres = mysql_query($q);
+    $cq_stations = 0;
+    $cq_found = 0;
+    $cq_uniq = 0;
+    $cq_nonuniq = 0;
+    $cq_esrnf = 0;
+    $c_updated = 0;
+    while($crow = mysql_fetch_assoc($cres)) {
+      $cq_stations += $crow["q_stations"];
+      $cq_found += $crow["q_found"];
+      $cq_uniq += $crow["q_uniq"];
+      $cq_nonuniq += $crow["q_nonuniq"];
+      $cq_esrnf += $crow["q_esrnf"];
+      if($crow["updated"] && (!$c_updated || $c_updated>$crow["updated"]))
+        $c_updated = $crow["updated"];
+    }
+    $p = 0;
+    if ($cq_stations)
+      $p = round($cq_found*100/$cq_stations);
+    echo "<td align=right>".$p."%</td>\n";
+    echo "<td align=right>".$cq_found."/<br/>".$cq_stations."</td>\n";
+    echo "<td align=right><font color=green>".$cq_uniq."</font></td>\n";
+    echo "<td align=right><font color=goldenrod>".$cq_nonuniq."</font></td>\n";
+    echo "<td align=right><font color=red>".$cq_esrnf."</font></td>\n";
+    if ($c_updated)
+      echo "<td align=right>".date("H:i:s d.m.Y",$c_updated)."</td>\n";
+    else
+      echo "<td>&nbsp;</td>\n";
     print "</tr>\n";
   }
   if ($region["source"]!="") 
