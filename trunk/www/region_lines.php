@@ -128,7 +128,8 @@ $query = "
     stations.closed,
     express.tutu_lat,
     express.tutu_lon,
-    stations.station_type_id
+    stations.station_type_id,
+    stations.express_code
   FROM
     `lines`
     LEFT JOIN stations_of_lines ON `lines`.id = stations_of_lines.line_id
@@ -210,6 +211,8 @@ while ($r = mysql_fetch_row($res))
   $output_row["tutu"]["lon"] = $r[25];
 
   $output_row["station_type_id"] = $r[26];
+  
+  $output_row["express"] = $r[27];
 
   $output["rows"][$ord] = $output_row;
 
@@ -384,7 +387,7 @@ unset($output_rows);
 <table border="1" cellspacing="0" cellpadding="0">
   <tr>
     <th>
-      ЕСР
+      ЕСР/<br>Эксп.
     </th>
     <th>
       Станция
@@ -430,6 +433,8 @@ unset($output_rows);
         if ($output_row["dup_esr"] != "")
 	  $tmp = "<strike>$tmp</strike>";
         echo "<a name=\"".$output_row["esr"]."\"></a><a href=\"./esr:".$output_row["esr"]."\">".$tmp."</a>";
+        if ($output_row["express"])
+          echo "<br/><font size=-1><a href=\"./express:".$output_row["express"]."\">".$output_row["express"]."</a></font>";
       ?>
     </td>
     <td style='background-color: <? echo $color[$output_row["status"]]; ?>'>
