@@ -38,7 +38,8 @@ $query = "
     divisions.name AS division,
     railways.map_url AS map_url,
     station_type_id AS stype,
-    stations.name_tr4k2 as name_tr4k2
+    stations.name_tr4k2 as name_tr4k2,
+    comment
   FROM
     stations
     LEFT JOIN regions ON stations.region_id = regions.id
@@ -74,6 +75,7 @@ $fields=array(
   "name_yarasp" => "Название (Яндекс.Расписания)",
   "yarasp_addr" => "Адрес (Яндекс.Расписания)",
   "stype" => "Статус",
+  "comment" => "Примечание",
 );
 
 if($row['express_code'])
