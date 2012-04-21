@@ -49,6 +49,7 @@ create table if not exists stations (
   station_type_id int not null default 0,
   closed varchar(255) not null default '',
   fixed int not null default 0,
+  comment text not null default '',
   key (yarasp_id),
   key (express_code)
 );
