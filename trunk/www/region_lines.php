@@ -144,8 +144,8 @@ $query = "
   WHERE 
     stations.region_id in ($ids_list)
   ORDER BY
-    `lines`.id,
-    stations_of_lines.id
+    IF(`lines`.sidx<0,100000,`lines`.sidx),
+    stations_of_lines.sidx
 ";
 
 if (!($res = mysql_query($query)))
