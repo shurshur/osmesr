@@ -130,12 +130,14 @@ create table if not exists `lines` (
   name_tr4 varchar(255) not null default '',
   esr1 varchar(6) not null default '',
   esr2 varchar(6) not null default '',
-  comment varchar(255) not null default ''
+  comment varchar(255) not null default '',
+  sidx int not null default 0
 );
 
 create table if not exists stations_of_lines (
   id int primary key auto_increment,
   line_id int not null default 0,
   esr varchar(6) not null default '',
+  sidx int not null default 0,
   key (esr)
 );
