@@ -129,7 +129,13 @@ $query = "
     express.tutu_lat,
     express.tutu_lon,
     stations.station_type_id,
-    stations.express_code
+    stations.express_code,
+    stations.name_nsi,
+    trim(concat(rec3ty.status, ' ', rec3ty.name)),
+    rec3ty.code,
+    rec3ty.lat,
+    rec3ty.lon,
+    `lines`.id
   FROM
     `lines`
     LEFT JOIN stations_of_lines ON `lines`.id = stations_of_lines.line_id
@@ -141,6 +147,7 @@ $query = "
     LEFT JOIN stations AS lines_end1 ON lines_end1.esr = `lines`.esr1
     LEFT JOIN stations AS lines_end2 ON lines_end2.esr = `lines`.esr2
     LEFT JOIN express ON express.express_code=stations.express_code
+    LEFT JOIN rec3ty ON rec3ty.esr = stations.esr
   WHERE 
     stations.region_id in ($ids_list)
   ORDER BY
@@ -182,6 +189,10 @@ while ($r = mysql_fetch_row($res))
     $output_row["names"]["rwua"] = $r[10];
   if ($r[14] != "") 
     $output_row["names"]["yarasp"] = $r[14];
+  if ($r[28] != "") 
+    $output_row["names"]["nsi"] = $r[28];
+  if ($r[29] != "")
+    $output_row["names"]["3ty"] = $r[29];
 
   $output_row["gdevagon"] = array();
   $output_row["gdevagon"]["lat"] = $r[11];
@@ -196,6 +207,11 @@ while ($r = mysql_fetch_row($res))
   $output_row["station_type"] = $r[18];
   $output_row["railway_id"] = $r[19];
   $output_row["closed"] = $r[23];
+  
+  $output_row["3ty"] = array();
+  $output_row["3ty"]["code"] = $r[30];
+  $output_row["3ty"]["lat"] = $r[31];
+  $output_row["3ty"]["lon"] = $r[32];
 
   $line_part = array();
   if ($r[21] != "") 
@@ -205,6 +221,7 @@ while ($r = mysql_fetch_row($res))
   if ($r[22] != "") 
     $line_part[] = $r[22];
   $output_row["line"] = implode(" -- ", $line_part);
+  $output_row["line_id"] = $r[33];
 
   $output_row["tutu"] = array();
   $output_row["tutu"]["lat"] = $r[24];
@@ -432,7 +449,9 @@ unset($output_rows);
         $tmp = $output_row["esr"];
         if ($output_row["dup_esr"] != "")
 	  $tmp = "<strike>$tmp</strike>";
-        echo "<a name=\"".$output_row["esr"]."\"></a><a href=\"./esr:".$output_row["esr"]."\">".$tmp."</a>";
+        echo "<a name='".$output_row["esr"]."'></a>";
+        echo "<a name='".$output_row["line_id"].$output_row["esr"]."'></a>";
+        echo "<a href=\"./esr:".$output_row["esr"]."\">".$tmp."</a>";
         if ($output_row["express"])
           echo "<br/><font size=-1><a href=\"./express:".$output_row["express"]."\">".$output_row["express"]."</a></font>";
       ?>
@@ -499,7 +518,9 @@ unset($output_rows);
 	  $tmp[] = "УЗ";
 	if (isset($output_row["names"]["yarasp"])) 
 	  $tmp[] = "ЯР";
-
+	if (isset($output_row["names"]["nsi"])) 
+	  $tmp[] = "ЭТП";
+	
         if (count($tmp) > 0) {
 	  $tmp = implode(", ", $tmp);
           if ($output_row["dup_esr"] != "")
@@ -541,17 +562,22 @@ unset($output_rows);
 	if ($output_row["yarasp"]["lat"] != 0 && $output_row["yarasp"]["lon"] != 0) {
           $tmp2 = "<a href='http://rasp.yandex.ru/info/station/"; 
           $tmp2 .=  $output_row["yarasp"]["id"]."'>rasp.yandex.ru</a>";
-	  $tmp[] .= $tmp2;
+	  $tmp[] = $tmp2;
+	}
+	if ($output_row["3ty"]["lat"] != 0 && $output_row["3ty"]["lon"] != 0) {
+	  $tmp2 = "<a href='http://3ty.ru/rasp/";
+	  $tmp2 .= $output_row["3ty"]["code"].".html'>3ty.ru</a>";
+	  $tmp[] = $tmp2;
 	}
 	if ($output_row["tutu"]["lat"] != 0 && $output_row["tutu"]["lon"] != 0) {
 	  $tmp2 = "<a href='http://www.tutu.ru/poezda/station/map/";
 	  $tmp2 .= $output_row["express_code"]."'>tutu.ru</a>";
-	  $tmp[] .= $tmp2;
+	  $tmp[] = $tmp2;
 	}
 	if ($output_row["gdevagon"]["lat"] != 0 && $output_row["gdevagon"]["lon"] != 0) {
           $tmp2 = "<a href='http://www.gdevagon.ru/scripts/info/station_detail.php?stid="; 
           $tmp2 .= substr($output_row["esr"],0,5)."'>gdevagon.ru</a>";
-	  $tmp[] .= $tmp2;
+	  $tmp[] = $tmp2;
 	}
 	$tmp2  = "";
 	if ($output["short_region_name"] != "")
