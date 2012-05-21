@@ -127,7 +127,11 @@ $query = "
     express.tutu_lat,
     express.tutu_lon,
     station_type_id,
-    stations.express_code
+    stations.express_code,
+    trim(concat(rec3ty.status, ' ', rec3ty.name)),
+    rec3ty.code,
+    rec3ty.lat,
+    rec3ty.lon
   FROM
     stations
     LEFT JOIN regions ON stations.region_id = regions.id
@@ -135,6 +139,7 @@ $query = "
     LEFT JOIN divisions ON stations.division_id = divisions.id
     LEFT JOIN station_types ON stations.station_type_id = station_types.id
     LEFT JOIN express ON stations.express_code = express.express_code
+    LEFT JOIN rec3ty ON rec3ty.esr = stations.esr
   WHERE 
     stations.region_id in ($ids_list)
   ORDER BY
@@ -172,6 +177,8 @@ while ($r = mysql_fetch_row($res))
     $output_row["names"]["rwua"] = $r[10];
   if ($r[14] != "") 
     $output_row["names"]["yarasp"] = $r[14];
+  if ($r[25] != "")
+    $output_row["names"]["3ty"] = $r[25];
 
   $output_row["gdevagon"] = array();
   $output_row["gdevagon"]["lat"] = $r[11];
@@ -194,6 +201,11 @@ while ($r = mysql_fetch_row($res))
   $output_row["station_type_id"] = $r[23];
   
   $output_row["express"] = $r[24];
+  
+  $output_row["3ty"] = array();
+  $output_row["3ty"]["code"] = $r[26];
+  $output_row["3ty"]["lat"] = $r[27];
+  $output_row["3ty"]["lon"] = $r[28];
 
   $output["rows"][$esr] = $output_row;
   $esrs[] = $esr;
@@ -494,6 +506,11 @@ mysql_free_result($res);
 	if ($output_row["yarasp"]["lat"] != 0 && $output_row["yarasp"]["lon"] != 0) {
           $tmp2 = "<a href='http://rasp.yandex.ru/info/station/"; 
           $tmp2 .=  $output_row["yarasp"]["id"]."'>rasp.yandex.ru</a>";
+	  $tmp[] = $tmp2;
+	}
+	if ($output_row["3ty"]["lat"] != 0 && $output_row["3ty"]["lon"] != 0) {
+	  $tmp2 = "<a href='http://3ty.ru/rasp/".$output_row["3ty"]["code"];
+	  $tmp2 .= ".html'>3ty.ru</a>";
 	  $tmp[] = $tmp2;
 	}
 	if ($output_row["tutu"]["lat"] != 0 && $output_row["tutu"]["lon"] != 0) {

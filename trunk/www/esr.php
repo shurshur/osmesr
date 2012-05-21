@@ -32,13 +32,18 @@ $query = "
     stations.name_tr4k1 AS name_tr4k1,
     stations.name_rwua AS name_rwua,
     stations.name_yarasp AS name_yarasp,
+    stations.yarasp_id AS code_yarasp,
     stations.yarasp_addr AS yarasp_addr,
-    regions.esr_name AS region,
+    regions.name AS region,
+    regions.source AS region_code,
     railways.name AS railway,
     divisions.name AS division,
     railways.map_url AS map_url,
     station_type_id AS stype,
-    stations.name_tr4k2 as name_tr4k2,
+    stations.name_tr4k2 AS name_tr4k2,
+    stations.name_nsi AS name_nsi,
+    trim(concat(rec3ty.status, ' ', rec3ty.name)) AS name_3ty,
+    rec3ty.code AS code_3ty,
     comment
   FROM
     stations
@@ -46,6 +51,7 @@ $query = "
     LEFT JOIN railways ON stations.railway_id = railways.id
     LEFT JOIN divisions ON stations.division_id = divisions.id
     LEFT JOIN express ON stations.express_code = express.express_code
+    LEFT JOIN rec3ty ON rec3ty.esr = stations.esr
   WHERE
     stations.esr = '".mysql_real_escape_string($esr)."'
 ";
@@ -67,11 +73,14 @@ $fields=array(
   "region" => "Регион",
   "railway" => "Железная дорога",
   "division" => "Отделение",
+  "lines" => "Линии",
   "name" => "Название",
   "name_rzd0" => "Название (РЖД)",
+  "name_nsi" => "Название (ЭТП РЖД)",
   "name_tr4k2" => "Название (Тарифное руководство N4)",
   "name_tr4k1" => "Название (ТР4, справочник тарифных расстояний)",
   "name_rwua" => "Название (Укрзализныци)",
+  "name_3ty" => "Название (3ty.ru)",
   "name_yarasp" => "Название (Яндекс.Расписания)",
   "yarasp_addr" => "Адрес (Яндекс.Расписания)",
   "stype" => "Статус",
@@ -85,6 +94,55 @@ if($row['map_url'])
   $row['railway'] = "<a href=\"".$row["map_url"]."\">".$row['railway']."</a>";
 
 $row["stype"] = $stypes[$row["stype"]];
+
+$row["region"] = "<a href='/esr/region:" . $row["region_code"]
+               . ":a#" . $esr ."'>" .$row["region"] . "</a>";
+
+$row["name_yarasp"] = "<a href='http://rasp.yandex.ru/info/station/"
+                    . $row["code_yarasp"] . "'>" . $row["name_yarasp"]
+                    . "</a>";
+                    
+$row["name_3ty"] = "<a href='http://3ty.ru/rasp/" . $row["code_3ty"] 
+                 . ".html'>" . $row["name_3ty"] . "</a>";
+
+$query = "
+  SELECT 
+    line_id,
+    end1.name,
+    `lines`.comment,
+    end2.name
+  FROM 
+    stations_of_lines,
+    `lines`
+    LEFT JOIN stations AS end1 ON end1.esr = `lines`.esr1
+    LEFT JOIN stations AS end2 ON end2.esr = `lines`.esr2
+  WHERE
+    stations_of_lines.esr = '".mysql_real_escape_string($esr)."' AND
+    `lines`.id = line_id 
+";
+if (!($res = mysql_query($query)))
+  die ("Error: ".mysql_error()."\n");
+
+$lines = array();
+while($rrow = mysql_fetch_row($res)) {
+  $line = array("id" => $rrow[0]);
+  $route_part = array();
+  if ($rrow[1] != '') $route_part[] = $rrow[1];
+  if ($rrow[2] != '') $route_part[] = $rrow[2];
+  if ($rrow[3] != '') $route_part[] = $rrow[3];
+  $line["route"] = implode(" -- ", $route_part);
+  $lines[] = $line;
+}
+
+$lines_part = array();
+foreach($lines as $line) {
+  $lines_part[] = "<a href='/esr/region:" . $row["region_code"] . ":l#" 
+                . $line["id"] . $esr . "'>" . $line["route"] . "</a>";
+}
+
+if (count($lines_part)>0) 
+  $row["lines"] = implode("<br>", $lines_part);
+
 
 print "<table border=0>\n";
 print "<tr><td colspan=3><hr></td></tr>\n";

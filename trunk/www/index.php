@@ -195,7 +195,7 @@ foreach ($regions as $region)
       echo "<td>&nbsp;</td>\n";
     echo "</tr>\n";
   } else {
-    echo "<tr><td>&raquo; <a href=\"./region:".$region["id"]."\">".$region["name"]."</a></td><td>&nbsp;</td><td align=right>".$region["q_stations"]."</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>";
+    echo "<tr><td>&nbsp;</td><td>&raquo; <a href=\"./region:".$region["id"]."\">".$region["name"]."</a></td><td>&nbsp;</td><td align=right>".$region["q_stations"]."</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>";
   }
 }
 
