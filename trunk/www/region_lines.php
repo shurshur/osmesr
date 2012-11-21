@@ -1,4 +1,5 @@
 <?
+#Header("HTTP/1.0 504 Temporary disabled");
 require_once("config.php");
 require_once("lib.php");
 
@@ -105,7 +106,7 @@ $query = "
     stations.name,
     regions.esr_name,
     stations.esr,
-    stations.osmnode,
+    1,
     railways.name,
     divisions.name,
     railways.map_url,
