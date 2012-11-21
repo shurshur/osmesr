@@ -44,7 +44,10 @@ $query = "
     stations.name_nsi AS name_nsi,
     trim(concat(rec3ty.status, ' ', rec3ty.name)) AS name_3ty,
     rec3ty.code AS code_3ty,
-    comment
+    stations.comment AS comment,
+    rw_st.id AS code_rw,
+    rw_st.name AS name_rw,
+    stations.dup_esr
   FROM
     stations
     LEFT JOIN regions ON stations.region_id = regions.id
@@ -52,6 +55,7 @@ $query = "
     LEFT JOIN divisions ON stations.division_id = divisions.id
     LEFT JOIN express ON stations.express_code = express.express_code
     LEFT JOIN rec3ty ON rec3ty.esr = stations.esr
+    LEFT JOIN rw_st ON rw_st.esr = stations.esr
   WHERE
     stations.esr = '".mysql_real_escape_string($esr)."'
 ";
@@ -81,6 +85,7 @@ $fields=array(
   "name_tr4k1" => "Название (ТР4, справочник тарифных расстояний)",
   "name_rwua" => "Название (Укрзализныци)",
   "name_3ty" => "Название (3ty.ru)",
+  "name_rw" => "Название (railwayz.info)",
   "name_yarasp" => "Название (Яндекс.Расписания)",
   "yarasp_addr" => "Адрес (Яндекс.Расписания)",
   "stype" => "Статус",
@@ -104,6 +109,32 @@ $row["name_yarasp"] = "<a href='http://rasp.yandex.ru/info/station/"
                     
 $row["name_3ty"] = "<a href='http://3ty.ru/rasp/" . $row["code_3ty"] 
                  . ".html'>" . $row["name_3ty"] . "</a>";
+
+$row["name_rw"] = "<a href='http://railwayz.info/photolines/showstation.php?stat_id=" . $row["code_rw"]
+                . "'>" . $row["name_rw"] . "</a>"; 
+
+$query = "
+  SELECT
+    esr,
+    name,
+    dup_esr
+  FROM
+    stations
+  WHERE
+    dup_esr='$esr'
+";
+if($row["dup_esr"])
+  $query.= "OR esr='".$row["dup_esr"]."' OR (dup_esr='".$row['dup_esr']."' AND esr!='".$row['esr']."')";
+
+if (!($res = mysql_query($query)))
+  die ("Error: ".mysql_error()."\n");
+
+if (mysql_num_rows($res)>0) {
+  print "Дублирующие коды<ul>\n";
+  while($row = mysql_fetch_row($res))
+    print "<li/><a href=./esr:".$row[0].">".($row[2]?"<s>":"").$row[0].": ".$row[1].($row[2]?"</s>":"")."</a>\n";
+  print "</ul>\n";
+}
 
 $query = "
   SELECT 

@@ -36,7 +36,7 @@ $query = "
     stations.name,
     regions.esr_name,
     stations.esr,
-    stations.osmnode,
+    1,
     railways.name,
     divisions.name,
     railways.map_url,

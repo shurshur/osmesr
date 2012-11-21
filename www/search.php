@@ -29,11 +29,11 @@ if($q) {
   $filter = null;
 
   if (preg_match('/^[0-9]{5,6}$/',$q)) {
-    $filter = "esr LIKE '".$q."%'";
+    $filter = "a.esr LIKE '".$q."%'";
   } elseif (preg_match('/^[0-9]{7}$/',$q)) {
-    $filter = "express_code LIKE '".$q."%'";
+    $filter = "a.express_code LIKE '".$q."%'";
   } else {
-    $cols = array("stations.name","name_rzd0","name_tr4k1","name_tr4k2","name_rwua","name_yarasp");
+    $cols = array("a.name","a.name_rzd0","a.name_tr4k1","a.name_tr4k2","a.name_rwua","a.name_yarasp");
     $filter = array();
     foreach ($cols as $col) $filter[] = "($col LIKE '%".mysql_real_escape_string($q)."%')";
     $filter = implode(" OR ", $filter);
@@ -42,20 +42,37 @@ if($q) {
   $query = "
     SELECT
       esr,
-      stations.name,
+      a.name,
       regions.name,
-      station_types.name
+      station_types.name,
+      a.station_type_id AS stid
     FROM
-      stations
-      LEFT JOIN regions ON stations.region_id = regions.id
-      LEFT JOIN station_types ON stations.station_type_id = station_types.id
+      stations AS a
+      LEFT JOIN regions ON a.region_id = regions.id
+      LEFT JOIN station_types ON a.station_type_id = station_types.id
     WHERE
       ($filter)
       AND dup_esr=''
-    ORDER BY
-      dup_esr ASC,
-      station_type_id ASC
   ";
+  if (preg_match('/^[0-9]{5,6}$/',$q))
+  $query.= "
+  UNION
+    SELECT
+      a.esr,
+      a.name,
+      regions.name,
+      station_types.name,
+      a.station_type_id AS stid
+    FROM
+      stations AS a
+      LEFT JOIN stations AS b ON a.esr=b.dup_esr
+      LEFT JOIN regions ON a.region_id = regions.id
+      LEFT JOIN station_types ON a.station_type_id = station_types.id
+    WHERE
+      b.esr LIKE '$q%'
+  ";
+  $query.= "ORDER BY stid ASC";
+  #print $query;
 
   $res = mysql_query($query);
 
