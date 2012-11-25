@@ -131,8 +131,8 @@ if (!($res = mysql_query($query)))
 
 if (mysql_num_rows($res)>0) {
   print "Дублирующие коды<ul>\n";
-  while($row = mysql_fetch_row($res))
-    print "<li/><a href=./esr:".$row[0].">".($row[2]?"<s>":"").$row[0].": ".$row[1].($row[2]?"</s>":"")."</a>\n";
+  while($rrow = mysql_fetch_row($res))
+    print "<li/><a href=./esr:".$rrow[0].">".($rrow[2]?"<s>":"").$rrow[0].": ".$rrow[1].($rrow[2]?"</s>":"")."</a>\n";
   print "</ul>\n";
 }
 
