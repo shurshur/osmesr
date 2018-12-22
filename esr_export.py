@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # vim:encoding=utf-8:shiftwidth=2:cindent:et
 import sys
+import csv
 import MySQLdb
 import MySQLdb.cursors
 import _mysql_exceptions
@@ -41,6 +42,8 @@ ORDER BY
   esr
 """
 
+r = csv.writer(sys.stdout, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
+
 cols = None
 c.execute(q)
 while 1:
@@ -49,9 +52,9 @@ while 1:
     break
   if not cols:
     cols = row.keys()
-    print '"'+'";"'.join(cols)+'"'
+    r.writerow(cols)
   for k in cols:
     if row[k] == None:
       row[k] = ""
-  print '"'+'";"'.join(row.values())+'"'
+  r.writerow(row.values())
 
